@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="yqb_car" type="motor_control.py" name="motor_control" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" />
+</launch>
