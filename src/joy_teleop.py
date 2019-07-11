@@ -4,6 +4,7 @@ import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Joy
 from std_msgs.msg import Float32
+from yqb_car.msg import CameraControl
 
 # Joystick Mapping
 # Motor
