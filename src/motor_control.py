@@ -21,10 +21,10 @@ WHEEL_RADIUS = 0.02  #in meters per radian
 class MotorControl(object):
     def __init__(self):
         # Define PWM channels
-        self.right_pwm = navio.pwm.PWM(M_RIGHT_PWM)
-        self.right_dir = navio.pwm.PWM(M_RIGHT_DIR)
-        self.left_pwm  = navio.pwm.PWM(M_LEFT_PWM)
-        self.left_dir  = navio.pwm.PWM(M_LEFT_DIR)
+        self.right_pwm_ch = navio.pwm.PWM(M_RIGHT_PWM)
+        self.right_dir_ch = navio.pwm.PWM(M_RIGHT_DIR)
+        self.left_pwm_ch  = navio.pwm.PWM(M_LEFT_PWM)
+        self.left_dir_ch  = navio.pwm.PWM(M_LEFT_DIR)
         self.initialize_pwm()
 
         # Subscribing
@@ -48,7 +48,7 @@ class MotorControl(object):
     def callback(self, data):
         self.cmd_data = data
         self.cmd_vel_to_diff(self.cmd_data)
-        self.turnWheels()
+        self.turn_wheels()
         self.publish_status()
         #rospy.loginfo(self.cmd_data)
     
@@ -85,8 +85,8 @@ class MotorControl(object):
         #rospy.loginfo("DIR (Left, Right): " + str(self.right_reverse) + ", " + str(self.left_reverse))
         #rospy.loginfo("PWM (Left, Right): " + str(self.left_pwm) + ", " + str(self.right_pwm))
         
-        self.right_pwm.set_duty_cycle(self.right_pwm)
-        self.left_pwm.set_duty_cycle(self.left_pwm)
+        self.right_pwm_ch.set_duty_cycle(self.right_pwm)
+        self.left_pwm_ch.set_duty_cycle(self.left_pwm)
 
     def publish_status(self):
         self.motor_status.left_pwm = self.left_pwm
@@ -97,21 +97,21 @@ class MotorControl(object):
         self.pub_status.publish(self.motor_status)
 
     def initialize_pwm(self):
-        self.right_pwm.initialize()
-        self.right_pwm.set_period(50)
-        self.right_pwm.enable()
+        self.right_pwm_ch.initialize()
+        self.right_pwm_ch.set_period(50)
+        self.right_pwm_ch.enable()
 
-        self.right_dir.initialize()
-        self.right_dir.set_period(50)
-        self.right_dir.enable()
+        self.right_dir_ch.initialize()
+        self.right_dir_ch.set_period(50)
+        self.right_dir_ch.enable()
 
-        self.left_pwm.initialize()
-        self.left_pwm.set_period(50)
-        self.left_pwm.enable()
+        self.left_pwm_ch.initialize()
+        self.left_pwm_ch.set_period(50)
+        self.left_pwm_ch.enable()
 
-        self.left_dir.initialize()
-        self.left_dir.set_period(50)
-        self.left_dir.enable()
+        self.left_dir_ch.initialize()
+        self.left_dir_ch.set_period(50)
+        self.left_dir_ch.enable()
 
         return True
 
