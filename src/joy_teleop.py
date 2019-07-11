@@ -24,11 +24,9 @@ class JoyTeleop(object):
 
         # Publish control
         self.pub_cmd_vel = rospy.Publisher('/control/motor/cmd_vel', Twist, queue_size=1)
-        self.pub_left_pan = rospy.Publisher('/control/camera/left/pan', Float32, queue_size=1)
-        self.pub_left_tilt = rospy.Publisher('/control/camera/left/tilt', Float32, queue_size=1)
-        self.pub_right_pan = rospy.Publisher('/control/camera/right/pan', Float32, queue_size=1)
-        self.pub_right_tilt = rospy.Publisher('/control/camera/right/tilt', Float32, queue_size=1)
+        self.pub_camera_control = rospy.Publisher('/control/camera', CameraControl)
         
+        self.camera_control = CameraControl()
         self.selected_camera = "LEFT"
 
         self.cmd_vel = Twist()
@@ -50,14 +48,17 @@ class JoyTeleop(object):
             self.selected_camera = "RIGHT"
             rospy.loginfo("Right Camera Selected.")  
         
-        # Camera Tilt Control
-        if self.selected_camera == "LEFT": self.pub_left_tilt.publish(joy_axes[CAMERA_TILT_AXIS])
-        elif self.selected_camera == "RIGHT": self.pub_right_tilt.publish(joy_axes[CAMERA_TILT_AXIS])  
-
         # Camera Pan Control
-        if self.selected_camera == "LEFT": self.pub_left_pan.publish(joy_axes[CAMERA_PAN_AXIS])
-        elif self.selected_camera == "RIGHT": self.pub_right_pan.publish(joy_axes[CAMERA_PAN_AXIS])
-            
+        pan_dir = joy_axes[CAMERA_PAN_AXIS]
+        if self.selected_camera == "LEFT": self.camera_control.left_pan_dir = pan_dir
+        elif self.selected_camera == "RIGHT": self.camera_control.right_pan_dir = pan_dir
+        
+        # Camera Tilt Control
+        tilt_dir = joy_axes[CAMERA_TILT_AXIS]
+        if self.selected_camera == "LEFT": self.camera_control.left_tilt_dir = tilt_dir
+        elif self.selected_camera == "RIGHT": self.camera_control.right_tilt_dir = tilt_dir 
+
+        self.pub_camera_control.publish(self.camera_control)
 
 if __name__ == "__main__":
     rospy.init_node('joy_teleop', log_level=rospy.INFO)
