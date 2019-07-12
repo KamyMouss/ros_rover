@@ -65,6 +65,7 @@ class CameraControlDriver(object):
 
 
     def update_pwm(self):  
+        self.validate_range()
         self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_pan_dir * VELOCITY_FACTOR
         self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_tilt_dir * VELOCITY_FACTOR
         self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir * VELOCITY_FACTOR
@@ -95,6 +96,27 @@ class CameraControlDriver(object):
         self.right_tilt.set_duty_cycle(self.cam_status.right_tilt_pwm)
 
         self.pub_cam_status.publish(self.cam_status)
+
+    def validate_range(self):
+        # Left Pan
+        if (self.cam_status.left_pan_pwm >= 0 and self.left_pan_pwm > LEFT_PAN_MAX) or (self.cam_status.left_pan_pwm < 0 and self.left_pan_pwm < LEFT_PAN_MIN):
+            rospy.logwarn("Left pan out of range!")
+            self.cam_status.left_pan_pwm = 0.0
+
+        # Left Tilt
+        if (self.cam_ctrl_dir.left_tilt_dir > 0 and self.left_tilt_pwm > LEFT_TILT_MAX) or (self.cam_ctrl_dir.left_tilt_dir < 0 and self.left_tilt_pwm < LEFT_TILT_MIN):
+            rospy.logwarn("Left tilt out of range!")
+            self.cam_ctrl_dir.left_pan_dir = 0.0
+    
+        # Right Pan
+        if (self.cam_status.right_pan_pwm > 0 and self.right_pan_pwm > RIGHT_PAN_MAX) or (self.cam_status.right_pan_pwm < 0 and self.right_pan_pwm < RIGHT_PAN_MIN):
+            rospy.logwarn("Right pan out of range!")
+            self.cam_status.right_pan_pwm = 0
+
+        # Right Tilt
+        if (self.cam_status.right_tilt_pwm > 0 and self.right_tilt_pwm > RIGHT_TILT_MAX) or (self.cam_status.right_tilt_pwm < 0 and self.right_tilt_pwm < RIGHT_TILT_MIN):
+            rospy.logwarn("Right tilt out of range!")
+            self.cam_status.right_tilt_pwm = 0 
 
 if __name__ == "__main__":
     rospy.init_node('camera_control_driver', log_level=rospy.INFO)
