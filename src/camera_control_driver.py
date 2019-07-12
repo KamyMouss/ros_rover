@@ -6,12 +6,6 @@ from sensor_msgs.msg import Joy
 from yqb_car.msg import CameraControl
 from yqb_car.msg import CameraStatus
 
-#Joystick mapping
-PAN_AXIS = 3             #Right Joystick horizontal
-TILT_AXIS = 4            #Right Joystick vertical
-LEFT_CAMERA_SELECT = 3   #Square button
-RIGHT_CAMERA_SELECT = 1  #Circle button
-
 #NAVIO pwn out channels
 SERVO_LEFT_PAN = 5
 SERVO_LEFT_TILT = 6
@@ -67,14 +61,14 @@ class CameraControlDriver(object):
 
     # Capture cmd_vel 
     def callback(self, data):
-        self.cam_ctrl_dir = data * VELOCITY_FACTOR
+        self.cam_ctrl_dir = data
 
 
     def update_pwm(self):  
-        self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_pan_dir
-        self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_tilt_dir 
-        self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir
-        self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir
+        self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_pan_dir * VELOCITY_FACTOR
+        self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_tilt_dir * VELOCITY_FACTOR
+        self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir * VELOCITY_FACTOR
+        self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir * VELOCITY_FACTOR
         self.set_pwm()
 
     def initialize_pwm(self):
