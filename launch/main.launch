@@ -1,6 +1,9 @@
 <launch>
+	<!-- Joystick nodes -->
+	<node pkg="joy" type="joy_node" name="joy_node" />
+	<node pkg="yqb_car" type="joy_teleop.py" name="joy_teleop" output="screen" />
+
+    <!-- Drivers -->
 	<node pkg="yqb_car" type="motor_control_driver.py" name="motor_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" />
 	<node pkg="yqb_car" type="camera_control_driver.py" name="camera_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" />
-	<node pkg="joy" type="joy_node" name="joy_node" />
-	<node pkg="yqb_car" type="joy_teleop.py" name="joy_teleop" />
 </launch>
