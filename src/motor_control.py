@@ -59,14 +59,14 @@ class MotorControl(object):
 
         self.v_right = ((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
         self.v_left = ((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
-        #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
+        rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
         
         if self.v_left >= 0:
             self.left_reverse = False
             #self.left_pwm.enable()
             self.left_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
         else:
-            self.left_reverse= True
+            self.left_reverse = True
             #self.left_pwm.disable()
             #Flipping left and right when reverse
             self.left_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR) 
