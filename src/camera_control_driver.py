@@ -71,8 +71,8 @@ class CameraControlDriver(object):
 
 
     def update_pwm(self):  
-        self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_tilt_dir
-        self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_pan_dir 
+        self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_pan_dir
+        self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_tilt_dir 
         self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir
         self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir
         self.set_pwm()
