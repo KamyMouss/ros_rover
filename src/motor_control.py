@@ -87,7 +87,7 @@ class MotorControl(object):
 
     def publish_status(self):
         self.motor_status.left_pwm = self.left_pwm
-        self.motor_status.right_pwm = self.left_pwm
+        self.motor_status.right_pwm = self.right_pwm
         self.motor_status.left_reverse = self.left_reverse
         self.motor_status.right_reverse = self.right_reverse
         
