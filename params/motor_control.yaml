@@ -1,1 +1,12 @@
+# Navio2 pwm out channel (0-13)
+right_pwm_out: 1
+right_dir_out: 2
+left_pwm_out: 3
+left_dir_out: 4
+
+# Max pwm for motors
 max_pwm: 2.500
+
+# Differential drive parameters (meters/radian)
+wheel_base: 0.10
+wheel_radius: 0.02

@@ -6,25 +6,25 @@ from geometry_msgs.msg import Twist
 from yqb_car.msg import MotorStatus
 
 # Change this for higher pwm range, default 20 (0 - 2500)
-VEL_TO_PWM_FACTOR = 2.5 / 0.125   
+VEL_TO_PWM_FACTOR = rospy.get_param("/motor_control_driver/max_pwm") / 0.125   
 
 #NAVIO pwn out channels
-M_RIGHT_PWM = 1
-M_RIGHT_DIR = 2
-M_LEFT_PWM = 3
-M_LEFT_DIR = 4
+RIGHT_PWM_CH = rospy.get_param("/motor_control_driver/right_pwm_out")
+RIGHT_DIR_CH = rospy.get_param("/motor_control_driver/right_dir_out")
+LEFT_PWM_CH = rospy.get_param("/motor_control_driver/left_pwm_out")
+LEFT_DIR_CH = rospy.get_param("/motor_control_driver/left_dir_out")
 
 #Differential Drive Parameters
-WHEEL_BASE = 0.10    #in meters per radian
-WHEEL_RADIUS = 0.02  #in meters per radian
+WHEEL_BASE = rospy.get_param("/motor_control_driver/wheel_base")
+WHEEL_RADIUS = rospy.get_param("/motor_control_driver/wheel_radius")
 
 class MotorControlDriver(object):
     def __init__(self):
         # Define PWM channels
-        self.right_pwm_ch = navio.pwm.PWM(M_RIGHT_PWM)
-        self.right_dir_ch = navio.pwm.PWM(M_RIGHT_DIR)
-        self.left_pwm_ch  = navio.pwm.PWM(M_LEFT_PWM)
-        self.left_dir_ch  = navio.pwm.PWM(M_LEFT_DIR)
+        self.right_pwm_ch = navio.pwm.PWM(RIGHT_PWM_CH)
+        self.right_dir_ch = navio.pwm.PWM(RIGHT_DIR_CH)
+        self.left_pwm_ch  = navio.pwm.PWM(LEFT_PWM_CH)
+        self.left_dir_ch  = navio.pwm.PWM(LEFT_DIR_CH)
         self.initialize_pwm()
 
         # Subscribing
@@ -33,13 +33,17 @@ class MotorControlDriver(object):
         # Publishing
         self.pub_status = rospy.Publisher('/status/motor', MotorStatus, queue_size=1)
 
+        # Creating messages
         self.motor_status = MotorStatus()
         self.cmd_data = Twist()
         
+        # Setting initial speed and pwm to 0
         self.v_right = 0
         self.v_left = 0
         self.right_pwm = 0
         self.left_pwm = 0
+
+        # Setting initial direction
         self.left_reverse = False
         self.right_reverse = False
         
