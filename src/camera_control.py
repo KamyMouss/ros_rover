@@ -3,8 +3,8 @@
 import rospy
 import navio
 from sensor_msgs.msg import Joy
-from std_msgs.msg import Float32
 from yqb_car.msg import CameraControl
+from yqb_car.msg import CameraStatus
 
 #Joystick mapping
 PAN_AXIS = 3             #Right Joystick horizontal
@@ -42,80 +42,39 @@ VELOCITY_FACTOR = 0.001
 
 class CameraControl(object):
     def __init__(self):
-        # Define PWM channels
+        # Define PWM channels on navio2 boards
         self.left_pan = navio.pwm.PWM(SERVO_LEFT_PAN)
         self.left_tilt = navio.pwm.PWM(SERVO_LEFT_TILT)
         self.right_pan  = navio.pwm.PWM(SERVO_RIGHT_PAN)
         self.right_tilt  = navio.pwm.PWM(SERVO_RIGHT_TILT)
-        self.left_pan_pwm = LEFT_PAN_CENTER
-        self.left_tilt_pwm = LEFT_TILT_CENTER
-        self.right_pan_pwm = RIGHT_PAN_CENTER
-        self.right_tilt_pwm = RIGHT_TILT_CENTER
         self.initialize_pwm()
+
+        # Subscribe to camera direction
+        self.sub_cam_ctrl = rospy.Subscriber('/control/camera', CameraControl, self.callback)
+        self.cam_ctrl_dir = [0.0, 0.0, 0.0, 0.0]
+        
+        # Publish camera status
+        self.pub_cam_status = rospy.Publisher('/status/camera', CameraStatus , queue_size=1)
+        self.cam_status = CameraStatus()
+        self.cam_status.left_pan_pwm = LEFT_PAN_CENTER
+        self.cam_status.left_tilt_pwm = LEFT_TILT_CENTER
+        self.cam_status.right_pan_pwm = RIGHT_PAN_CENTER
+        self.cam_status.right_tilt_pwm = RIGHT_TILT_CENTER
         self.set_pwm()
 
-        self.selected_camera = "LEFT"
-
-        self.pub_left_pan = rospy.Publisher('/status/camera/left/pan', Float32, queue_size=1)
-        self.pub_left_tilt = rospy.Publisher('/status/camera/left/tilt', Float32, queue_size=1)
-        self.pub_right_pan = rospy.Publisher('/status/camera/right/pan', Float32, queue_size=1)
-        self.pub_right_tilt = rospy.Publisher('/status/camera/right/tilt', Float32, queue_size=1)
-
-        self.joy_sub = rospy.Subscriber('/joy', Joy, self.callback)
-        self.joy_axes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        self.joy_buttons = [0, 0, 0, 0, 0, 0, 0, 0]
-        
-        rospy.loginfo("Left Initial Pan: " + str(self.left_pan_pwm) + " Tilt: " + str(self.left_tilt_pwm))
-        rospy.loginfo("Right Initial Pan: " + str(self.right_pan_pwm) + " Tilt: " + str(self.right_tilt_pwm))    
+        rospy.loginfo("Left Initial Pan: " + str(self.cam_status.left_pan_pwm) + " Tilt: " + str(self.cam_status.left_tilt_pwm))
+        rospy.loginfo("Right Initial Pan: " + str(self.cam_status.right_pan_pwm) + " Tilt: " + str(self.cam_status.right_tilt_pwm))    
 
     # Capture cmd_vel 
     def callback(self, data):
-        self.joy_axes = data.axes
-        self.joy_buttons = data.buttons
+        self.cam_ctrl_dir = data * VELOCITY_FACTOR
+
 
     def update_pwm(self):  
-        # Camera select switch
-        if self.joy_buttons[LEFT_CAMERA_SELECT] == 1 and self.selected_camera != "LEFT":
-            self.selected_camera = "LEFT"
-            rospy.loginfo("Left Camera Selected.")
-            rospy.loginfo("Left Pan: " + str(self.left_pan_pwm) + " Tilt: " + str(self.left_tilt_pwm))
-        elif self.joy_buttons[RIGHT_CAMERA_SELECT] == 1 and self.selected_camera != "RIGHT":
-            self.selected_camera = "RIGHT"
-            rospy.loginfo("Right Camera Selected.")
-            rospy.loginfo("Right Pan: " + str(self.right_pan_pwm) + " Tilt: " + str(self.right_tilt_pwm))   
-
-        if abs(self.joy_axes[TILT_AXIS]) != 0.0 or abs(self.joy_axes[PAN_AXIS]) != 0.0:
-            # Servo pwm update
-            if self.selected_camera == "LEFT":
-                # Left Tilt
-                if (self.joy_axes[TILT_AXIS] > 0 and self.left_tilt_pwm > LEFT_TILT_MAX) or (self.joy_axes[TILT_AXIS] < 0 and self.left_tilt_pwm < LEFT_TILT_MIN):
-                    rospy.logwarn("Left tilt out of range!")
-                else:
-                    self.left_tilt_pwm += self.joy_axes[TILT_AXIS] * VELOCITY_FACTOR
-
-                # Left Pan
-                if (self.joy_axes[PAN_AXIS] >= 0 and self.left_pan_pwm > LEFT_PAN_MAX) or (self.joy_axes[PAN_AXIS] < 0 and self.left_pan_pwm < LEFT_PAN_MIN):
-                    rospy.logwarn("Left pan out of range!")
-                else:
-                    self.left_pan_pwm += self.joy_axes[PAN_AXIS] * VELOCITY_FACTOR
-
-                rospy.loginfo("Left Pan: " + str(self.left_pan_pwm) + " Tilt: " + str(self.left_tilt_pwm))
-            
-            elif self.selected_camera == "RIGHT":
-                # Right Tilt
-                if (self.joy_axes[TILT_AXIS] > 0 and self.right_tilt_pwm > RIGHT_TILT_MAX) or (self.joy_axes[TILT_AXIS] < 0 and self.right_tilt_pwm < RIGHT_TILT_MIN):
-                    rospy.logwarn("Right tilt out of range!")
-                else: 
-                    self.right_tilt_pwm += self.joy_axes[TILT_AXIS] * VELOCITY_FACTOR
-                
-                # Right Pan
-                if (self.joy_axes[PAN_AXIS] > 0 and self.right_pan_pwm > RIGHT_PAN_MAX) or (self.joy_axes[PAN_AXIS] < 0 and self.right_pan_pwm < RIGHT_PAN_MIN):
-                    rospy.logwarn("Right pan out of range!")
-                else:
-                    self.right_pan_pwm += self.joy_axes[PAN_AXIS] * VELOCITY_FACTOR
-
-                rospy.loginfo("Right Pan: " + str(self.right_pan_pwm) + " Tilt: " + str(self.right_tilt_pwm))    
-
+        self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_tilt_dir
+        self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_pan_dir 
+        self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir
+        self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir
         self.set_pwm()
 
     def initialize_pwm(self):
@@ -136,10 +95,12 @@ class CameraControl(object):
         self.right_tilt.enable()
 
     def set_pwm(self):
-        self.left_pan.set_duty_cycle(self.left_pan_pwm)
-        self.left_tilt.set_duty_cycle(self.left_tilt_pwm)
-        self.right_pan.set_duty_cycle(self.right_pan_pwm)
-        self.right_tilt.set_duty_cycle(self.right_tilt_pwm)
+        self.left_pan.set_duty_cycle(self.cam_status.left_pan_pwm)
+        self.left_tilt.set_duty_cycle(self.cam_status.left_tilt_pwm)
+        self.right_pan.set_duty_cycle(self.cam_status.right_pan_pwm)
+        self.right_tilt.set_duty_cycle(self.cam_status.right_tilt_pwm)
+
+        self.pub_cam_status.publish(self.cam_status)
 
 if __name__ == "__main__":
     rospy.init_node('camera_control', log_level=rospy.INFO)
