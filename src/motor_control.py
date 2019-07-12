@@ -73,7 +73,7 @@ class MotorControl(object):
         else: self.right_reverse = True
 
         # Flip wheel pwm if both wheels are reversed (for realistic driving)
-        if self.right_reverse = True and self.left_reverse = True:
+        if self.right_reverse == True and self.left_reverse == True:
             temp = self.left_pwm
             self.left_pwm = self.right_pwm
             self.right_pwm = temp
