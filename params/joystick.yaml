@@ -1,0 +1,9 @@
+# Motor
+motor_steer_axis: 0     #Left joystick horizontal
+motor_move_axis: 1      #Left joystick vertical
+
+# Camera
+camera_pan_axis: 3      #Right Joystick horizontal
+camera_tilt_axis: 4     #Right Joystick vertical
+left_camera_select: 3   #Square button
+right_camera_select: 1  #Circle button

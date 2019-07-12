@@ -70,11 +70,15 @@ class MotorControlDriver(object):
         self.right_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR)
         
         # Determine if wheel direction is reversed
-        if self.v_left >= 0: self.left_reverse = False
-        else: self.left_reverse = True
+        if self.v_left >= 0: 
+            self.left_reverse = False
+        else: 
+            self.left_reverse = True
  
-        if self.v_right >= 0: self.right_reverse = False
-        else: self.right_reverse = True
+        if self.v_right >= 0: 
+            self.right_reverse = False
+        else: 
+            self.right_reverse = True
 
         # Flip wheel pwm if both wheels are reversed (for realistic driving)
         if self.right_reverse == True and self.left_reverse == True:

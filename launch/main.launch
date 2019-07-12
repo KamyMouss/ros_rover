@@ -1,12 +1,17 @@
 <launch>
 	<!-- Joystick nodes -->
 	<node pkg="joy" type="joy_node" name="joy_node" />
-	<node pkg="yqb_car" type="joy_teleop.py" name="joy_teleop" output="screen" />
-
-    <!-- Drivers -->
-	<node pkg="yqb_car" type="motor_control_driver.py" name="motor_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen">
-		<rosparam file="$(find yqb_car)/params/motor_control.yaml" command="load"/>
+	<node pkg="yqb_car" type="joy_teleop.py" name="joy_teleop" output="screen" >
+		<rosparam file="$(find yqb_car)/params/joystick.yaml" command="load"/>
 	</node>
 
-	<node pkg="yqb_car" type="camera_control_driver.py" name="camera_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" />
+    <!-- Motors nodes -->
+	<node pkg="yqb_car" type="motor_control_driver.py" name="motor_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen">
+		<rosparam file="$(find yqb_car)/params/motor_driver.yaml" command="load"/>
+	</node>
+
+	<!-- Camera nodes-->
+	<node pkg="yqb_car" type="camera_control_driver.py" name="camera_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" >
+		<rosparam file="$(find yqb_car)/params/camera_driver.yaml" command="load"/>
+	</node>
 </launch>

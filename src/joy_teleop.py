@@ -8,14 +8,14 @@ from yqb_car.msg import CameraControl
 
 # Joystick Mapping
 # Motor
-MOTOR_STEER_AXIS = 0     #Left joystick horizontal
-MOTOR_MOVE_AXIS = 1      #Left joystick vertical
+MOTOR_STEER_AXIS = rospy.get_param("/joy_teleop/motor_steer_axis")
+MOTOR_MOVE_AXIS = rospy.get_param("/joy_teleop/motor_move_axis")
 
 # Camera
-CAMERA_PAN_AXIS = 3      #Right Joystick horizontal
-CAMERA_TILT_AXIS = 4     #Right Joystick vertical
-LEFT_CAMERA_SELECT = 3   #Square button
-RIGHT_CAMERA_SELECT = 1  #Circle button
+CAMERA_PAN_AXIS = rospy.get_param("/joy_teleop/camera_pan_axis")
+CAMERA_TILT_AXIS = rospy.get_param("/joy_teleop/camera_tilt_axis")
+LEFT_CAMERA_SELECT = rospy.get_param("/joy_teleop/left_camera_select")
+RIGHT_CAMERA_SELECT = rospy.get_param("/joy_teleop/right_camera_select")
 
 
 class JoyTeleop(object):
@@ -28,7 +28,9 @@ class JoyTeleop(object):
         self.pub_camera_control = rospy.Publisher('/control/camera', CameraControl, queue_size=1)
         
         self.camera_control = CameraControl()
+        
         self.selected_camera = "LEFT"
+        rospy.loginfo("Left Camera Control Selected.")
 
         self.cmd_vel = Twist()
 
@@ -44,10 +46,10 @@ class JoyTeleop(object):
         # Camera Select Control
         if joy_buttons[LEFT_CAMERA_SELECT] == 1 and self.selected_camera != "LEFT":
             self.selected_camera = "LEFT"
-            rospy.loginfo("Left Camera Selected.")
+            rospy.loginfo("Left Camera Control Selected.")
         elif joy_buttons[RIGHT_CAMERA_SELECT] == 1 and self.selected_camera != "RIGHT":
             self.selected_camera = "RIGHT"
-            rospy.loginfo("Right Camera Selected.")  
+            rospy.loginfo("Right Camera Control Selected.")  
         
         # Camera Pan Control
         pan_dir = joy_axes[CAMERA_PAN_AXIS]

@@ -6,32 +6,30 @@ from yqb_car.msg import CameraControl
 from yqb_car.msg import CameraStatus
 
 #NAVIO pwn out channels
-SERVO_LEFT_PAN = 5
-SERVO_LEFT_TILT = 6
-SERVO_RIGHT_PAN = 7
-SERVO_RIGHT_TILT = 8
+SERVO_LEFT_PAN = rospy.get_param("/camera_control_driver/servo_left_pan")
+SERVO_LEFT_TILT = rospy.get_param("/camera_control_driver/servo_left_tilt")
+SERVO_RIGHT_PAN = rospy.get_param("/camera_control_driver/servo_right_pan")
+SERVO_RIGHT_TILT = rospy.get_param("/camera_control_driver/servo_right_tilt")
 
 #Camera servo pwm ranges (in ms)
-LEFT_PAN_MIN = 0.600 
-LEFT_PAN_CENTER = 2.025
-LEFT_PAN_MAX = 4.000
+LEFT_PAN_MIN = rospy.get_param("/camera_control_driver/left_pan_min")
+LEFT_PAN_CENTER = rospy.get_param("/camera_control_driver/left_pan_center")
+LEFT_PAN_MAX = rospy.get_param("/camera_control_driver/left_pan_max")
 
-LEFT_TILT_MIN = 0.650
-LEFT_TILT_CENTER = 2.000
-LEFT_TILT_MAX = 2.500
+LEFT_TILT_MIN = rospy.get_param("/camera_control_driver/left_pan_min")
+LEFT_TILT_CENTER = rospy.get_param("/camera_control_driver/left_tilt_center")
+LEFT_TILT_MAX = rospy.get_param("/camera_control_driver/left_tilt_max")
 
-RIGHT_PAN_MIN = 0.400
-RIGHT_PAN_CENTER = 0.950
-RIGHT_PAN_MAX = 3.000
+RIGHT_PAN_MIN = rospy.get_param("/camera_control_driver/right_pan_min")
+RIGHT_PAN_CENTER = rospy.get_param("/camera_control_driver/right_pan_center")
+RIGHT_PAN_MAX = rospy.get_param("/camera_control_driver/right_pan_max")
 
-RIGHT_TILT_MIN = .800
-RIGHT_TILT_CENTER = 2.000
-RIGHT_TILT_MAX = 2.500
-
-BUFFER_RANGE = .01
+RIGHT_TILT_MIN = rospy.get_param("/camera_control_driver/right_tilt_min")
+RIGHT_TILT_CENTER = rospy.get_param("/camera_control_driver/right_tilt_center")
+RIGHT_TILT_MAX = rospy.get_param("/camera_control_driver/right_tilt_max")
 
 #Servo turn speed (default 0.001)
-CAM_CTRL_SPEED = 0.001
+CAM_CTRL_SPEED =  rospy.get_param("/camera_control_driver/cam_ctrl_speed")
 
 class CameraControlDriver(object):
     def __init__(self):

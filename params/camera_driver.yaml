@@ -1,0 +1,25 @@
+#NAVIO pwn out channels
+servo_left_pan: 5
+servo_left_tilt: 6
+servo_right_pan: 7
+servo_right_tilt: 8
+
+#Camera servo pwm ranges (in ms)
+left_pan_min: 0.600 
+left_pan_center: 2.025
+left_pan_max: 4.000
+
+left_pan_min: 0.650
+left_tilt_center: 2.000
+left_tilt_max: 2.500
+
+right_pan_min: 0.400
+right_pan_center: 0.950
+right_pan_max: 3.000
+
+right_tilt_min: .800
+right_tilt_center: 2.000
+right_tilt_max: 2.500
+
+#Servo turn speed (default 0.001)
+cam_ctrl_speed: 0.001
