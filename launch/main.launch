@@ -1,0 +1,6 @@
+<launch>
+	<node pkg="yqb_car" type="motor_control.py" name="motor_control" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" />
+	<node pkg="yqb_car" type="camera_control.py" name="camera_control" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" />
+	<node pkg="joy" type="joy_node" name="joy_node" />
+	<node pkg="yqb_car" type="joy_teleop.py" name="joy_teleop" />
+</launch>
