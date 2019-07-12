@@ -2,7 +2,6 @@
 
 import rospy
 import navio
-from sensor_msgs.msg import Joy
 from yqb_car.msg import CameraControl
 from yqb_car.msg import CameraStatus
 
@@ -32,7 +31,7 @@ RIGHT_TILT_MAX = 2.500
 BUFFER_RANGE = .01
 
 #Servo turn speed (default 0.001)
-VELOCITY_FACTOR = 0.001
+CAM_CTRL_SPEED = 0.001
 
 class CameraControlDriver(object):
     def __init__(self):
@@ -93,25 +92,25 @@ class CameraControlDriver(object):
         if (self.cam_ctrl_dir.left_pan_dir > 0 and self.cam_status.left_pan_pwm > LEFT_PAN_MAX) or (self.cam_ctrl_dir.left_pan_dir < 0 and self.cam_status.left_pan_pwm < LEFT_PAN_MIN):
             rospy.logwarn("Left pan out of range!")
         else:
-            self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_pan_dir * VELOCITY_FACTOR
+            self.cam_status.left_pan_pwm += self.cam_ctrl_dir.left_pan_dir * CAM_CTRL_SPEED
 
         # Left Tilt
         if (self.cam_ctrl_dir.left_tilt_dir > 0 and self.cam_status.left_tilt_pwm > LEFT_TILT_MAX) or (self.cam_ctrl_dir.left_tilt_dir < 0 and self.cam_status.left_tilt_pwm < LEFT_TILT_MIN):
             rospy.logwarn("Left tilt out of range!")
         else:     
-            self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_tilt_dir * VELOCITY_FACTOR
+            self.cam_status.left_tilt_pwm += self.cam_ctrl_dir.left_tilt_dir * CAM_CTRL_SPEED
     
         # Right Pan
         if (self.cam_ctrl_dir.right_pan_dir > 0 and self.cam_status.right_pan_pwm > RIGHT_PAN_MAX) or (self.cam_ctrl_dir.right_pan_dir < 0 and self.cam_status.right_pan_pwm < RIGHT_PAN_MIN):
             rospy.logwarn("Right pan out of range!")
         else:
-            self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir * VELOCITY_FACTOR
+            self.cam_status.right_pan_pwm += self.cam_ctrl_dir.right_pan_dir * CAM_CTRL_SPEED
 
         # Right Tilt
         if (self.cam_ctrl_dir.right_tilt_dir > 0 and self.cam_status.right_tilt_pwm > RIGHT_TILT_MAX) or (self.cam_ctrl_dir.right_tilt_dir < 0 and self.cam_status.right_tilt_pwm < RIGHT_TILT_MIN):
             rospy.logwarn("Right tilt out of range!")
         else:
-            self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir * VELOCITY_FACTOR
+            self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir * CAM_CTRL_SPEED
 
         self.set_pwm()
 

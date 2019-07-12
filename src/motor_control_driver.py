@@ -6,7 +6,7 @@ from geometry_msgs.msg import Twist
 from yqb_car.msg import MotorStatus
 
 # Change this for higher pwm range, default 20 (0 - 2500)
-VEL_TO_PWM_FACTOR = 20   
+VEL_TO_PWM_FACTOR = 2.5 / 0.125   
 
 #NAVIO pwn out channels
 M_RIGHT_PWM = 1
