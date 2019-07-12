@@ -99,22 +99,22 @@ class CameraControlDriver(object):
 
     def validate_range(self):
         # Left Pan
-        if (self.cam_status.left_pan_pwm >= 0 and self.left_pan_pwm > LEFT_PAN_MAX) or (self.cam_status.left_pan_pwm < 0 and self.left_pan_pwm < LEFT_PAN_MIN):
+        if (self.cam_ctrl_dir.left_pan_pwm >= 0 and self.cam_status.left_pan_pwm > LEFT_PAN_MAX) or (self.cam_ctrl_dir.left_pan_pwm < 0 and self.cam_status.left_pan_pwm < LEFT_PAN_MIN):
             rospy.logwarn("Left pan out of range!")
-            self.cam_status.left_pan_pwm = 0.0
+            self.cam_ctrl_dir.left_pan_pwm = 0.0
 
         # Left Tilt
-        if (self.cam_ctrl_dir.left_tilt_dir > 0 and self.left_tilt_pwm > LEFT_TILT_MAX) or (self.cam_ctrl_dir.left_tilt_dir < 0 and self.left_tilt_pwm < LEFT_TILT_MIN):
+        if (self.cam_ctrl_dir.left_tilt_dir > 0 and self.status.left_tilt_pwm > LEFT_TILT_MAX) or (self.cam_ctrl_dir.left_tilt_dir < 0 and self.status.left_tilt_pwm < LEFT_TILT_MIN):
             rospy.logwarn("Left tilt out of range!")
             self.cam_ctrl_dir.left_pan_dir = 0.0
     
         # Right Pan
-        if (self.cam_status.right_pan_pwm > 0 and self.right_pan_pwm > RIGHT_PAN_MAX) or (self.cam_status.right_pan_pwm < 0 and self.right_pan_pwm < RIGHT_PAN_MIN):
+        if (self.cam_ctrl_dir.right_pan_pwm > 0 and self.cam_status.right_pan_pwm > RIGHT_PAN_MAX) or (self.cam_ctrl_dir.right_pan_pwm < 0 and self.cam_status.right_pan_pwm < RIGHT_PAN_MIN):
             rospy.logwarn("Right pan out of range!")
-            self.cam_status.right_pan_pwm = 0
+            self.cam_ctrl_dir.right_pan_pwm = 0
 
         # Right Tilt
-        if (self.cam_status.right_tilt_pwm > 0 and self.right_tilt_pwm > RIGHT_TILT_MAX) or (self.cam_status.right_tilt_pwm < 0 and self.right_tilt_pwm < RIGHT_TILT_MIN):
+        if (self.cam_ctrl_dir.right_tilt_pwm > 0 and self.cam_status.right_tilt_pwm > RIGHT_TILT_MAX) or (self.cam_ctrl_dir.right_tilt_pwm < 0 and self.cam_status.right_tilt_pwm < RIGHT_TILT_MIN):
             rospy.logwarn("Right tilt out of range!")
             self.cam_status.right_tilt_pwm = 0 
 
