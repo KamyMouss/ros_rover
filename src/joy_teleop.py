@@ -25,7 +25,7 @@ class JoyTeleop(object):
 
         # Publish control
         self.pub_cmd_vel = rospy.Publisher('/control/motor/cmd_vel', Twist, queue_size=1)
-        self.pub_camera_control = rospy.Publisher('/control/camera', CameraControl)
+        self.pub_camera_control = rospy.Publisher('/control/camera', CameraControl, queue_size=1)
         
         self.camera_control = CameraControl()
         self.selected_camera = "LEFT"
