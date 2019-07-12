@@ -36,7 +36,6 @@ class MotorControl(object):
         self.motor_status = MotorStatus()
         self.cmd_data = Twist()
         
-        
         self.v_right = 0
         self.v_left = 0
         self.right_pwm = 0
@@ -47,39 +46,37 @@ class MotorControl(object):
     # Capture cmd_vel 
     def callback(self, data):
         self.cmd_data = data
-        self.cmd_vel_to_diff(self.cmd_data)
+        self.cmd_vel_to_pwm(self.cmd_data)
         self.turn_wheels()
         self.publish_status()
         #rospy.loginfo(self.cmd_data)
     
     #transform to differential drive velocities (right and left wheel velocities)
-    def cmd_vel_to_diff(self, cmd_data):
+    def cmd_vel_to_pwm(self, cmd_data):
         linear_v = cmd_data.linear.x
         angular_w = cmd_data.angular.z
-
+        
+        # Calculate differential speed
         self.v_right = ((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
         self.v_left = ((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
         rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
         
-        if self.v_left >= 0:
-            self.left_reverse = False
-            #self.left_pwm.enable()
-            self.left_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
-        else:
-            self.left_reverse = True
-            #self.left_pwm.disable()
-            #Flipping left and right when reverse
-            self.left_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR) 
+        # Transform to pwm values (in ms)
+        self.left_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
+        self.right_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR)
+        
+        # Determine if wheel direction is reversed
+        if self.v_left >= 0: self.left_reverse = False
+        else: self.left_reverse = True
  
-        if self.v_right >= 0:
-            self.right_reverse = False
-            #self.right_pwm.enable()
-            self.right_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR)
-        else:
-            self.right_reverse = True
-            #self.left_pwm.disable()
-            #Flipping left and right when reverse 
-            self.right_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
+        if self.v_right >= 0: self.right_reverse = False
+        else: self.right_reverse = True
+
+        # Flip wheel pwm if both wheels are reversed (for realistic driving)
+        if self.right_reverse = True and self.left_reverse = True:
+            temp = self.left_pwm
+            self.left_pwm = self.right_pwm
+            self.right_pwm = temp
 
     def turn_wheels(self):
         #rospy.loginfo("DIR (Left, Right): " + str(self.right_reverse) + ", " + str(self.left_reverse))
