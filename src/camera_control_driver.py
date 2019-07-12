@@ -40,7 +40,7 @@ BUFFER_RANGE = .01
 #Servo turn speed (default 0.001)
 VELOCITY_FACTOR = 0.001
 
-class CameraControl(object):
+class CameraControlDriver(object):
     def __init__(self):
         # Define PWM channels on navio2 boards
         self.left_pan = navio.pwm.PWM(SERVO_LEFT_PAN)
@@ -103,8 +103,8 @@ class CameraControl(object):
         self.pub_cam_status.publish(self.cam_status)
 
 if __name__ == "__main__":
-    rospy.init_node('camera_control', log_level=rospy.INFO)
-    camera_control_object = CameraControl()
+    rospy.init_node('camera_control_driver', log_level=rospy.INFO)
+    camera_control_object = CameraControlDriver()
     rate = rospy.Rate(100)
     
     while not rospy.is_shutdown():

@@ -114,7 +114,7 @@ class MotorControlDriver(object):
 
 
 if __name__ == "__main__":
-    rospy.init_node('motor_control', log_level=rospy.INFO)
+    rospy.init_node('motor_control_driver', log_level=rospy.INFO)
     motor_control_object = MotorControlDriver()
     rate = rospy.Rate(1)
     rospy.spin()
