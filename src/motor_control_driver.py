@@ -18,7 +18,7 @@ M_LEFT_DIR = 4
 WHEEL_BASE = 0.10    #in meters per radian
 WHEEL_RADIUS = 0.02  #in meters per radian
 
-class MotorControl(object):
+class MotorControlDriver(object):
     def __init__(self):
         # Define PWM channels
         self.right_pwm_ch = navio.pwm.PWM(M_RIGHT_PWM)
@@ -59,7 +59,7 @@ class MotorControl(object):
         # Calculate differential speed
         self.v_right = ((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
         self.v_left = ((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
-        rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
+        #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
         
         # Transform to pwm values (in ms)
         self.left_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
@@ -115,6 +115,6 @@ class MotorControl(object):
 
 if __name__ == "__main__":
     rospy.init_node('motor_control', log_level=rospy.INFO)
-    motor_control_object = MotorControl()
+    motor_control_object = MotorControlDriver()
     rate = rospy.Rate(1)
     rospy.spin()
