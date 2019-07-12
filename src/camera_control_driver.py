@@ -51,7 +51,7 @@ class CameraControlDriver(object):
 
         # Subscribe to camera direction
         self.sub_cam_ctrl = rospy.Subscriber('/control/camera', CameraControl, self.callback)
-        self.cam_ctrl_dir = [0.0, 0.0, 0.0, 0.0]
+        self.cam_ctrl_dir = CameraControl()
         
         # Publish camera status
         self.pub_cam_status = rospy.Publisher('/status/camera', CameraStatus , queue_size=1)
