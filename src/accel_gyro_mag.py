@@ -7,16 +7,16 @@ import navio.util
 import rospy
 from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import Twist
-from yqb_car.msg import AccelGyroMag
+from yqb_car.msg import AccelGyroMagMsg
 
 
 class AccelGyroMag(object):
     def __init__(self):
-        self.pub = rospy.Publisher('/imu/data', Float32MultiArray, queue_size=1)
+        self.pub = rospy.Publisher('/imu/data', AccelGyroMagMsg, queue_size=1)
         self.imu_sensor = rospy.get_param("/accel_gyro_mag/imu_sensor")
         self.imu = None
-	    self.initialize()       
-        self.imu_data = AccelGyroMag()
+        self.initialize()       
+        self.imu_data = AccelGyroMagMsg()
 
     def get_data(self):
 

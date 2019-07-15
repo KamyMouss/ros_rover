@@ -13,7 +13,7 @@ add_message_files(
   MotorStatus.msg
   CameraControl.msg
   CameraStatus.msg
-  AccelGyroMag.msg
+  AccelGyroMagMsg.msg
   Barometer.msg
   GPS.msg
 )
