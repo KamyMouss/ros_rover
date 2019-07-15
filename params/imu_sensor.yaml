@@ -1,2 +1,2 @@
 # Choose which sensor used(mpu or lsm)
-imu_sensor: "lpu"
+imu_sensor: "lsm"

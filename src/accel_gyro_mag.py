@@ -31,25 +31,25 @@ class AccelGyroMag(object):
         # print "Temperature:   ", imu.temperature
         # print "Magnetometer:  ", imu.magnetometer_data
 
-        # m9a, m9g, m9m = self.imu.getMotion9()
+        m9a, m9g, m9m = self.imu.getMotion9()
 
         # print "Acc:", "{:+7.3f}".format(m9a[0]), "{:+7.3f}".format(m9a[1]), "{:+7.3f}".format(m9a[2]),
         # print " Gyr:", "{:+8.3f}".format(m9g[0]), "{:+8.3f}".format(m9g[1]), "{:+8.3f}".format(m9g[2]),
         # print " Mag:", "{:+7.3f}".format(m9m[0]), "{:+7.3f}".format(m9m[1]), "{:+7.3f}".format(m9m[2])
         
-        imu_data.accel[0] = m9a[0]
-        imu_data.accel[1] = m9a[1]
-        imu_data.accel[2] = m9a[2]
+        self.imu_data.accel[0] = m9a[0]
+        self.imu_data.accel[1] = m9a[1]
+        self.imu_data.accel[2] = m9a[2]
 
-        imu_data.gyro[0] = m9g[0]
-        imu_data.gyro[1] = m9g[1]
-        imu_data.gyro[2] = m9g[2]
+        self.imu_data.gyro[0] = m9g[0]
+        self.imu_data.gyro[1] = m9g[1]
+        self.imu_data.gyro[2] = m9g[2]
         
-        imu_data.mag[0] = m9m[0]
-        imu_data.mag[1] = m9m[1]
-        imu_data.mag[2] = m9m[2]
+        self.imu_data.mag[0] = m9m[0]
+        self.imu_data.mag[1] = m9m[1]
+        self.imu_data.mag[2] = m9m[2]
 
-        self.pub.publish(imu_data)
+        self.pub.publish(self.imu_data)
 
     def initialize(self):
         if self.imu_sensor == 'mpu':
@@ -61,7 +61,7 @@ class AccelGyroMag(object):
             self.imu = navio.mpu9250.MPU9250()
 
         if self.imu.testConnection():
-            rospy.loginfo("Imu Sensor Connection Established")
+            rospy.loginfo("Imu Sensor Connection Established: " + self.imu_sensor)
         else:
             rospy.logwarn("Imu Sensor Connection Error")
 
