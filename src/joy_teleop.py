@@ -36,12 +36,9 @@ class JoyTeleop(object):
     def callback(self, data):
         joy_axes = data.axes
         joy_buttons = data.buttons
-        pub_motor = False
-        pub_camera = False
         
         # Motor Control
-        if joy_axes[MOTOR_STEER_AXIS] != 0.0 or joy_axes[MOTOR_STEER_AXIS] != 0.0:
-            pub_motor = True
+        if joy_axes[MOTOR_STEER_AXIS] != 0.0 or joy_axes[MOTOR_MOVE_AXIS] != 0.0:
             self.cmd_vel.angular.z = joy_axes[MOTOR_STEER_AXIS]
             self.cmd_vel.linear.x = joy_axes[MOTOR_MOVE_AXIS]
             self.pub_cmd_vel.publish(self.cmd_vel)
