@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
-import ../lib/navio
+from ../lib import navio
 from yqb_car.msg import CameraControl
 from yqb_car.msg import CameraStatus
 
