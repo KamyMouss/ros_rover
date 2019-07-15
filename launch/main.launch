@@ -17,5 +17,8 @@
 	
 	<!-- Sensor Nodes-->
 	<node pkg="yqb_car" type="adc_reader.py" name="adc_reader" />
-
+	<node pkg="yqb_car" type="accel_gyro_mag.py" name="accel_gyro_mag" >
+		<rosparam file="$(find yqb_car)/params/imu_sensor.yaml" command="load"/>
+	</node>
+	
 </launch>

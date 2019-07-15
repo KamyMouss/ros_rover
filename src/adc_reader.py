@@ -2,10 +2,8 @@
 
 import navio.adc
 import navio.util
-
 import rospy
 from std_msgs.msg import Float32MultiArray
-from geometry_msgs.msg import Twist
 
 
 class AdcReader(object):
