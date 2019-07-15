@@ -14,7 +14,7 @@ class AccelGyroMag(object):
         self.pub = rospy.Publisher('/imu/data', Float32MultiArray, queue_size=1)
         self.imu_sensor = rospy.get_param("/accel_gyro_mag/imu_sensor")
         self.imu = None
-       
+	self.initialize()       
 
     def get_data(self):
 
