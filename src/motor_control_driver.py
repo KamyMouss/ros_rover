@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
-from ../lib import navio
+from ..lib import navio
 from geometry_msgs.msg import Twist
 from yqb_car.msg import MotorStatus
 
