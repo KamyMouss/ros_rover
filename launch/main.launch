@@ -5,7 +5,7 @@
 		<rosparam file="$(find yqb_car)/params/joystick.yaml" command="load"/>
 	</node>
 
-    <!-- Motors nodes -->
+	<!-- Motors nodes -->
 	<node pkg="yqb_car" type="motor_control_driver.py" name="motor_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen">
 		<rosparam file="$(find yqb_car)/params/motor_driver.yaml" command="load"/>
 	</node>
@@ -14,4 +14,8 @@
 	<node pkg="yqb_car" type="camera_control_driver.py" name="camera_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen" >
 		<rosparam file="$(find yqb_car)/params/camera_driver.yaml" command="load"/>
 	</node>
+	
+	<!-- Sensor Nodes-->
+	<node pkg="yqb_car" type="adc_reader.py" name="adc_reader" />
+
 </launch>

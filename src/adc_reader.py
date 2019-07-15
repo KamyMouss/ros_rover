@@ -13,19 +13,20 @@ class AdcReader(object):
         self.pub = rospy.Publisher('/health/batteries', Float32MultiArray, queue_size=1)
         self.adc = navio.adc.ADC()
         self.adc_voltages = Float32MultiArray()
+        self.adc_voltages.data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-    def get_voltage(self, direction):
+    def get_voltage(self):
         for i in range (0, self.adc.channel_count):
-            self.adc_voltages[i] = self.adc.read(i)
+            self.adc_voltages.data[i] = self.adc.read(i)
             
-        self.pub.publish(adc_voltages)
+        self.pub.publish(self.adc_voltages)
 
 
 if __name__ == "__main__":
     rospy.init_node('adc_reader')
     adc_reader = AdcReader()
 
-    rate = rospy.Rate(0.1)
+    rate = rospy.Rate(1)
 
     while not rospy.is_shutdown():
         adc_reader.get_voltage()
