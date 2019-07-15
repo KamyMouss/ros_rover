@@ -21,18 +21,16 @@ class GPSReader(object):
             if opts.reopen:
                 self.ubl.close()
                 self.ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=2)
-                continue
-            print(empty)
-            break
+
         #print(msg.name())
         if msg.name() == "NAV_POSLLH":
             outstr = str(msg).split(",")[1:]
             outstr = "".join(outstr)
-            print(outstr)
+            print outstr
         if msg.name() == "NAV_STATUS":
             outstr = str(msg).split(",")[1:2]
             outstr = "".join(outstr)
-            print(outstr)
+            print outstr
         #print(str(msg))
 
     def initialize(self):
