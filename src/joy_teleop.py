@@ -51,14 +51,21 @@ class JoyTeleop(object):
             rospy.loginfo("Right Camera Control Selected.")  
         
         # Camera Pan Control
-        pan_dir = joy_axes[CAMERA_PAN_AXIS]
-        if self.selected_camera == "LEFT": self.camera_control.left_pan_dir = pan_dir
-        elif self.selected_camera == "RIGHT": self.camera_control.right_pan_dir = pan_dir
         
+        pan_dir = joy_axes[CAMERA_PAN_AXIS]
+        if pan_dir != 0.0:
+            if self.selected_camera == "LEFT": self.camera_control.left_pan_dir = pan_dir
+            elif self.selected_camera == "RIGHT": self.camera_control.right_pan_dir = pan_dir
+        else: 
+            self.camera_control.left_pan_dir = self.camera_control.right_pan_dir = 0.0
+
         # Camera Tilt Control
         tilt_dir = joy_axes[CAMERA_TILT_AXIS]
-        if self.selected_camera == "LEFT": self.camera_control.left_tilt_dir = tilt_dir
-        elif self.selected_camera == "RIGHT": self.camera_control.right_tilt_dir = tilt_dir 
+        if tilt_dir != 0.0:
+            if self.selected_camera == "LEFT": self.camera_control.left_tilt_dir = tilt_dir
+            elif self.selected_camera == "RIGHT": self.camera_control.right_tilt_dir = tilt_dir 
+        else: 
+            self.camera_control.left_tilt_dir = self.camera_control.right_tilt_dir = 0.0
 
         self.pub_camera_control.publish(self.camera_control)
 
