@@ -25,10 +25,12 @@ class GPSReader(object):
         #print(msg.name())
         if msg.name() == "NAV_POSLLH":
             outstr = str(msg).split(",")[1:]
-            outstr = "".join(outstr)
+            print outstr
+	    outstr = "".join(outstr)
             print outstr
         if msg.name() == "NAV_STATUS":
             outstr = str(msg).split(",")[1:2]
+            print outstr
             outstr = "".join(outstr)
             print outstr
         #print(str(msg))
@@ -72,7 +74,7 @@ if __name__ == "__main__":
     rospy.init_node('gps')
     gps_reader_object = GPSReader()
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(1000)
 
     while not rospy.is_shutdown():
         gps_reader_object.get_data()
