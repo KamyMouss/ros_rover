@@ -13,6 +13,9 @@ add_message_files(
   MotorStatus.msg
   CameraControl.msg
   CameraStatus.msg
+  AccelGyroMag.msg
+  Barometer.msg
+  GPS.msg
 )
 
 generate_messages(

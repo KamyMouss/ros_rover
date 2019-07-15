@@ -7,6 +7,7 @@ import navio.util
 import rospy
 from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import Twist
+from yqb_car.msg import AccelGyroMag
 
 
 class AccelGyroMag(object):
@@ -14,7 +15,8 @@ class AccelGyroMag(object):
         self.pub = rospy.Publisher('/imu/data', Float32MultiArray, queue_size=1)
         self.imu_sensor = rospy.get_param("/accel_gyro_mag/imu_sensor")
         self.imu = None
-	self.initialize()       
+	    self.initialize()       
+        self.imu_data = AccelGyroMag()
 
     def get_data(self):
 
@@ -29,11 +31,25 @@ class AccelGyroMag(object):
         # print "Temperature:   ", imu.temperature
         # print "Magnetometer:  ", imu.magnetometer_data
 
-        m9a, m9g, m9m = self.imu.getMotion9()
+        # m9a, m9g, m9m = self.imu.getMotion9()
 
-        print "Acc:", "{:+7.3f}".format(m9a[0]), "{:+7.3f}".format(m9a[1]), "{:+7.3f}".format(m9a[2]),
-        print " Gyr:", "{:+8.3f}".format(m9g[0]), "{:+8.3f}".format(m9g[1]), "{:+8.3f}".format(m9g[2]),
-        print " Mag:", "{:+7.3f}".format(m9m[0]), "{:+7.3f}".format(m9m[1]), "{:+7.3f}".format(m9m[2])
+        # print "Acc:", "{:+7.3f}".format(m9a[0]), "{:+7.3f}".format(m9a[1]), "{:+7.3f}".format(m9a[2]),
+        # print " Gyr:", "{:+8.3f}".format(m9g[0]), "{:+8.3f}".format(m9g[1]), "{:+8.3f}".format(m9g[2]),
+        # print " Mag:", "{:+7.3f}".format(m9m[0]), "{:+7.3f}".format(m9m[1]), "{:+7.3f}".format(m9m[2])
+        
+        imu_data.accel[0] = m9a[0]
+        imu_data.accel[1] = m9a[1]
+        imu_data.accel[2] = m9a[2]
+
+        imu_data.gyro[0] = m9g[0]
+        imu_data.gyro[1] = m9g[1]
+        imu_data.gyro[2] = m9g[2]
+        
+        imu_data.mag[0] = m9m[0]
+        imu_data.mag[1] = m9m[1]
+        imu_data.mag[2] = m9m[2]
+
+        self.pub.publish(imu_data)
 
     def initialize(self):
         if self.imu_sensor == 'mpu':
