@@ -44,7 +44,7 @@ class AdcReader(object):
             self.adc_voltages.A1_status = "OVER"
             rospy.logwarn("A1 is overvolted!")
         else: 
-            self.adc_voltages.A0_status = "OK"
+            self.adc_voltages.A1_status = "OK"
 
         self.pub.publish(self.adc_voltages)
 
