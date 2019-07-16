@@ -53,8 +53,8 @@ class CameraControlDriver(object):
         self.cam_status.right_tilt_pwm = RIGHT_TILT_CENTER
         self.set_pwm()
 
-        rospy.loginfo("Left Initial Pan: " + str(self.cam_status.left_pan_pwm) + " Tilt: " + str(self.cam_status.left_tilt_pwm))
-        rospy.loginfo("Right Initial Pan: " + str(self.cam_status.right_pan_pwm) + " Tilt: " + str(self.cam_status.right_tilt_pwm))    
+        rospy.loginfo("Left Camera Initial Pan: " + str(self.cam_status.left_pan_pwm) + " Tilt: " + str(self.cam_status.left_tilt_pwm))
+        rospy.loginfo("Right Camera Initial Pan: " + str(self.cam_status.right_pan_pwm) + " Tilt: " + str(self.cam_status.right_tilt_pwm))    
 
     # Capture cmd_vel 
     def callback(self, data):
