@@ -4,7 +4,7 @@ import navio.adc
 import navio.util
 import rospy
 from std_msgs.msg import Float32MultiArray
-from std_msgs.ssg import ADC
+from yqb_car.msg import ADC
 
 
 class AdcReader(object):
@@ -16,8 +16,8 @@ class AdcReader(object):
         self.adc_voltages.A1 = 0
 
     def get_voltage(self):
-        self.adc_voltages.A0[0] = self.adc.read(0)
-        self.adc_voltages.A0[1] = self.adc.read(1)    
+        self.adc_voltages.A0 = self.adc.read(0)
+        self.adc_voltages.A1 = self.adc.read(1)    
 
         self.pub.publish(self.adc_voltages)
 

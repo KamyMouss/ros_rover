@@ -1,2 +1,2 @@
 float32 A0
-float21 A1
+float32 A1
