@@ -89,7 +89,7 @@ class CameraControlDriver(object):
 
     def update_pwm(self):
         # Check if direction command is sent
-        if self.cam_ctrl_dir.left_pan_dir > 0 or self.cam_ctrl_dir.left_tilt_dir > 0 or self.cam_ctrl_dir.right_pan_dir > 0 or self.cam_ctrl_dir.right_tilt_dir > 0:
+        if self.cam_ctrl_dir.left_pan_dir != 0.0 or self.cam_ctrl_dir.left_tilt_dir != 0.0 or self.cam_ctrl_dir.right_pan_dir != 0.0 or self.cam_ctrl_dir.right_tilt_dir != 0.0:
             # Left Pan
             if (self.cam_ctrl_dir.left_pan_dir > 0 and self.cam_status.left_pan_pwm > LEFT_PAN_MAX) or (self.cam_ctrl_dir.left_pan_dir < 0 and self.cam_status.left_pan_pwm < LEFT_PAN_MIN):
                 rospy.logwarn("Left pan out of range!")
