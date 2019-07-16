@@ -72,14 +72,16 @@ class JoyTeleop(object):
 
             self.pub_camera_control.publish(self.camera_control)
         else: #Complicated way to avoid publishing when not needed
-            if joy_pan_dir == 0.0:
-                self.camera_control.left_pan_dir = joy_pan_dir
-                self.camera_control.right_pan_dir = joy_pan_dir
-            if joy_tilt_dir == 0.0:
-                self.camera_control.left_tilt_dir = joy_tilt_dir
-                self.camera_control.right_tilt_dir = joy_tilt_dir
+            if self.camera_control.left_pan_dir != 0.0 or self.camera_control.right_pan_dir != 0.0:
+                self.camera_control.left_pan_dir = 0.0
+                self.camera_control.right_pan_dir = 0.0
+                self.pub_camera_control.publish(self.camera_control)
+                
+            if self.camera_control.left_tilt_dir != 0.0 or self.camera_control.right_tilt_dir != 0.0:
+                self.camera_control.left_tilt_dir = 0.0
+                self.camera_control.right_tilt_dir = 0.0
+                self.pub_camera_control.publish(self.camera_control)
 
-            self.pub_camera_control.publish(self.camera_control)
         
 
 if __name__ == "__main__":
