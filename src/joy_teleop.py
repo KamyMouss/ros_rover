@@ -58,24 +58,29 @@ class JoyTeleop(object):
             self.selected_camera = "RIGHT"
             rospy.loginfo("Right Camera Control Selected.")  
         
-        # Camera Pan Control
+        # Camera Pan/Tilt Control
+        joy_pan_dir = joy_axes[CAMERA_PAN_AXIS]
+        joy_tilt_dir = joy_axes[CAMERA_TILT_AXIS]
+
+        if joy_pan_dir != 0.0 or joy_tilt_dir != 0.0:
+            if self.selected_camera == "LEFT": 
+                self.camera_control.left_pan_dir = joy_pan_dir
+                self.camera_control.left_tilt_dir = joy_tilt_dir
+            elif self.selected_camera == "RIGHT": 
+                self.camera_control.right_pan_dir = joy_pan_dir
+                self.camera_control.right_tilt_dir = joy_tilt_dir 
+
+            self.pub_camera_control.publish(self.camera_control)
+        else: #Complicated way to avoid publishing when not needed
+            if joy_pan_dir == 0.0:
+                self.camera_control.left_pan_dir = joy_pan_dir
+                self.camera_control.right_pan_dir = joy_pan_dir
+            if joy_tilt_dir == 0.0:
+                self.camera_control.left_tilt_dir = joy_tilt_dir
+                self.camera_control.right_tilt_dir = joy_tilt_dir
+
+            self.pub_camera_control.publish(self.camera_control)
         
-        pan_dir = joy_axes[CAMERA_PAN_AXIS]
-        if pan_dir != 0.0:
-            if self.selected_camera == "LEFT": self.camera_control.left_pan_dir = pan_dir
-            elif self.selected_camera == "RIGHT": self.camera_control.right_pan_dir = pan_dir
-        else: 
-            self.camera_control.left_pan_dir = self.camera_control.right_pan_dir = 0.0
-
-        # Camera Tilt Control
-        tilt_dir = joy_axes[CAMERA_TILT_AXIS]
-        if tilt_dir != 0.0:
-            if self.selected_camera == "LEFT": self.camera_control.left_tilt_dir = tilt_dir
-            elif self.selected_camera == "RIGHT": self.camera_control.right_tilt_dir = tilt_dir 
-        else: 
-            self.camera_control.left_tilt_dir = self.camera_control.right_tilt_dir = 0.0
-
-        self.pub_camera_control.publish(self.camera_control)
 
 if __name__ == "__main__":
     rospy.init_node('joy_teleop', log_level=rospy.INFO)
