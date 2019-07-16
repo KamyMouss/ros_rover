@@ -69,6 +69,8 @@ class GPSReader(object):
         self.ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_CLOCK, 5)
         #ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_DGPS, 5)
 
+        rospy.loginfo("GPS initialized.")
+
 
 if __name__ == "__main__":
     rospy.init_node('gps')

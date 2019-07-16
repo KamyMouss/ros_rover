@@ -13,6 +13,7 @@ class BarometerReader(object):
         self.pub = rospy.Publisher('/sensor/barometer', Barometer, queue_size=1)
         self.baro = navio.ms5611.MS5611()
         self.baro.initialize()   
+        rospy.loginfo("Barometer initialized.")
         self.baro_data = Barometer()
 
     def get_data(self):
