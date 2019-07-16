@@ -26,7 +26,7 @@ class RosWebsocket(object):
         # self.status_led = Empty()
 
         self.sub_batteries = rospy.Subscriber('/health/batteries', ADC, self.callback)
-        self.haelth_batteries = ADC()
+        self.health_batteries = ADC()
 
         # NOT IMPLEMENTED
         # self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.callback)
@@ -43,20 +43,34 @@ class RosWebsocket(object):
 
 
         # Publish joystick control
-        self.pub_cmd_vel = rospy.Publisher('/joy', Joy, queue_size=1)
+        self.pub_joy = rospy.Publisher('/joy', Joy, queue_size=1)
         self.joy_data = Joy()
 
     def callback(self, data):
         # send data over websocket
-	    # print self.msg2json(data)
+	    print self.msg2json(data)
 
     def msg2json(self, msg):
         # Convert a ROS message to JSON format
         y = yaml.load(str(msg))
         return json.dumps(y,indent=4)
-        
+
+    def send_joy_controls(self):
+        self.pub_joy.publish(self.joy_data)
+
+    def json2joy(self)    
+        self.joy_data
+
+    def receive_data(self):
+        pass
 
 if __name__ == "__main__":
     rospy.init_node('ros_websocket', log_level=rospy.INFO)
     ros_websocket_object = RosWebsocket()
+    rate = rospy.Rate(100)
+
+    while not rospy.is_shutdown():
+        ros_websocket_object.send_joy_controls()
+        rate.sleep()
+
     rospy.spin()
