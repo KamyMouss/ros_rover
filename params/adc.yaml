@@ -1,0 +1,6 @@
+# ADC Thresholds (V)
+A0_min: 4500
+A0_max: 5500
+
+A1_min: 17500
+A1_max: 18500
