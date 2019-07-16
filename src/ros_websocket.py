@@ -48,7 +48,7 @@ class RosWebsocket(object):
 
     def callback(self, data):
         # send data over websocket
-	    print self.msg2json(data)
+	    # print self.msg2json(data)
 
     def msg2json(self, msg):
         # Convert a ROS message to JSON format
