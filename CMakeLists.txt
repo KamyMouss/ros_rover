@@ -16,6 +16,7 @@ add_message_files(
   AccelGyroMagMsg.msg
   Barometer.msg
   GPS.msg
+  ADC.msg
 )
 
 generate_messages(
