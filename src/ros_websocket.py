@@ -48,12 +48,11 @@ class RosWebsocket(object):
 
     def callback(self, data):
         # send data over websocket
-
+	print data
     def msg2json(msg):
         # Convert a ROS message to JSON format
         y = yaml.load(str(msg))
         return json.dumps(y,indent=4)
-
         
 
 if __name__ == "__main__":
