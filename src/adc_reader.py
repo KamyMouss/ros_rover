@@ -8,9 +8,9 @@ from yqb_car.msg import ADC
 
 # ADC Thresholds (V)
 A0_MIN = rospy.get_param("/adc_reader/A0_min")
-A0_MAX = rospy.get_param("/adc_reader/A0_min")
+A0_MAX = rospy.get_param("/adc_reader/A0_max")
 A1_MIN = rospy.get_param("/adc_reader/A1_min")
-A1_MAX = rospy.get_param("/adc_reader/A1_min")
+A1_MAX = rospy.get_param("/adc_reader/A1_max")
 
 
 class AdcReader(object):
