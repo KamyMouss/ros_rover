@@ -24,6 +24,7 @@ class AdcReader(object):
         self.adc_voltages.A1_status = "OK"
 
     def get_voltage(self):
+        # A0
         self.adc_voltages.A0 = self.adc.read(0)
         if self.adc_voltages.A0 < A0_MIN:
             self.adc_voltages.A0_status = "UNDER"
@@ -31,7 +32,10 @@ class AdcReader(object):
         elif self.adc_voltages.A0 > A0_MAX:
             self.adc_voltages.A0_status = "OVER"
             rospy.logwarn("A0 is overvolted!")
+        else:
+            self.adc_voltages.A0_status = "OK"
 
+        # A1    
         self.adc_voltages.A1 = self.adc.read(1)
         if self.adc_voltages.A1 < A1_MIN:
             self.adc_voltages.A1_status = "UNDER"
@@ -39,6 +43,8 @@ class AdcReader(object):
         elif self.adc_voltages.A1 > A1_MAX:
             self.adc_voltages.A1_status = "OVER"
             rospy.logwarn("A1 is overvolted!")
+        else: 
+            self.adc_voltages.A0_status = "OK"
 
         self.pub.publish(self.adc_voltages)
 
