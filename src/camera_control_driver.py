@@ -77,6 +77,8 @@ class CameraControlDriver(object):
         self.right_tilt.set_period(50)
         self.right_tilt.enable()
 
+        rospy.loginfo("Camera Control initialized.")
+
     def set_pwm(self):
         self.left_pan.set_duty_cycle(self.cam_status.left_pan_pwm)
         self.left_tilt.set_duty_cycle(self.cam_status.left_tilt_pwm)
