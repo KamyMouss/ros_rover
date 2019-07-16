@@ -28,10 +28,10 @@ class MotorControlDriver(object):
         self.initialize_pwm()
 
         # Subscribing
-        self.sub_right = rospy.Subscriber('/control/motor/cmd_vel', Twist, self.callback)
+        self.sub_right = rospy.Subscriber('/control/wheels/cmd_vel', Twist, self.callback)
         
         # Publishing
-        self.pub_status = rospy.Publisher('/status/motor', MotorStatus, queue_size=1)
+        self.pub_status = rospy.Publisher('/status/wheels', MotorStatus, queue_size=1)
 
         # Creating messages
         self.motor_status = MotorStatus()
@@ -118,7 +118,7 @@ class MotorControlDriver(object):
         self.left_dir_ch.set_period(50)
         self.left_dir_ch.enable()
 
-        return True
+        rospy.loginfo("Wheel motors initialized.")
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ class JoyTeleop(object):
         self.sub = rospy.Subscriber('/joy', Joy, self.callback)
 
         # Publish control
-        self.pub_cmd_vel = rospy.Publisher('/control/motor/cmd_vel', Twist, queue_size=1)
+        self.pub_cmd_vel = rospy.Publisher('/control/wheels/cmd_vel', Twist, queue_size=1)
         self.pub_camera_control = rospy.Publisher('/control/camera', CameraControl, queue_size=1)
         
         self.camera_control = CameraControl()
@@ -76,7 +76,7 @@ class JoyTeleop(object):
                 self.camera_control.left_pan_dir = 0.0
                 self.camera_control.right_pan_dir = 0.0
                 self.pub_camera_control.publish(self.camera_control)
-                
+
             if self.camera_control.left_tilt_dir != 0.0 or self.camera_control.right_tilt_dir != 0.0:
                 self.camera_control.left_tilt_dir = 0.0
                 self.camera_control.right_tilt_dir = 0.0
