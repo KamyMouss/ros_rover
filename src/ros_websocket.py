@@ -59,4 +59,5 @@ class RosWebsocket(object):
 if __name__ == "__main__":
     rospy.init_node('ros_websocket', log_level=rospy.INFO)
     ros_websocket_object = RosWebsocket()
+    rate = rospy.Rate(1)
     rospy.spin()

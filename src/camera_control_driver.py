@@ -59,8 +59,6 @@ class CameraControlDriver(object):
     # Capture cmd_vel 
     def callback(self, data):
         self.cam_ctrl_dir = data
-        self.update_pwm()
-        self.set_pwm()
 
     def initialize_pwm(self):
         self.left_pan.initialize()
@@ -114,14 +112,13 @@ class CameraControlDriver(object):
         else:
             self.cam_status.right_tilt_pwm += self.cam_ctrl_dir.right_tilt_dir * CAM_CTRL_SPEED
 
+        self.set_pwm()
 
 if __name__ == "__main__":
     rospy.init_node('camera_control_driver', log_level=rospy.INFO)
     camera_control_object = CameraControlDriver()
-    rospy.spin()
-
-    # rate = rospy.Rate(100)
+    rate = rospy.Rate(100)
     
-    # while not rospy.is_shutdown():
-    #     camera_control_object.update_pwm()
-    #     rate.sleep()
+    while not rospy.is_shutdown():
+        camera_control_object.update_pwm()
+        rate.sleep()
