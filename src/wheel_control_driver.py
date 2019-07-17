@@ -7,7 +7,7 @@ from geometry_msgs.msg import Twist
 from yqb_car.msg import WheelStatus
 
 # Change this for higher pwm range, default 20 (0 - 2500)
-VEL_TO_PWM_FACTOR = rospy.get_param("/wheel_control_driver/max_pwm") / 0.125   
+MAX_PWM = rospy.get_param("/wheel_control_driver/max_pwm")   
 
 #NAVIO pwn out channels
 RIGHT_PWM_CH = rospy.get_param("/wheel_control_driver/right_pwm_out")
@@ -62,13 +62,13 @@ class WheelControlDriver(object):
         angular_w = cmd_data.angular.z
         
         # Calculate differential speed
-        self.v_right = ((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
-        self.v_left = ((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)
+        self.v_right = (((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS))
+        self.v_left = (((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS))
         #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
         
         # Transform to pwm values (in ms)
-        self.left_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
-        self.right_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR)
+        self.left_pwm = abs(self.v_left * MAX_PWM)
+        self.right_pwm = abs(self.v_right * MAX_PWM)
         
         # Determine if wheel direction needs to be reversed
         if self.v_left >= 0: 
