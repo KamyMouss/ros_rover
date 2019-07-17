@@ -6,7 +6,7 @@
 	</node>
 
 	<!-- Motors nodes -->
-	<node pkg="yqb_car" type="motor_control_driver.py" name="motor_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen">
+	<node pkg="yqb_car" type="wheel_control_driver.py" name="motor_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen">
 		<rosparam file="$(find yqb_car)/params/motor_driver.yaml" command="load"/>
 	</node>
 

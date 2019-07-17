@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
-  MotorStatus.msg
+  WheelStatus.msg
   CameraControl.msg
   CameraStatus.msg
   AccelGyroMagMsg.msg

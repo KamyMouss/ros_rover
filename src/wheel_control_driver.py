@@ -4,22 +4,22 @@ import rospy
 import navio
 import os
 from geometry_msgs.msg import Twist
-from yqb_car.msg import MotorStatus
+from yqb_car.msg import WheelStatus
 
 # Change this for higher pwm range, default 20 (0 - 2500)
-VEL_TO_PWM_FACTOR = rospy.get_param("/motor_control_driver/max_pwm") / 0.125   
+VEL_TO_PWM_FACTOR = rospy.get_param("/wheel_control_driver/max_pwm") / 0.125   
 
 #NAVIO pwn out channels
-RIGHT_PWM_CH = rospy.get_param("/motor_control_driver/right_pwm_out")
-RIGHT_DIR_CH = rospy.get_param("/motor_control_driver/right_dir_out")
-LEFT_PWM_CH = rospy.get_param("/motor_control_driver/left_pwm_out")
-LEFT_DIR_CH = rospy.get_param("/motor_control_driver/left_dir_out")
+RIGHT_PWM_CH = rospy.get_param("/wheel_control_driver/right_pwm_out")
+RIGHT_DIR_CH = rospy.get_param("/wheel_control_driver/right_dir_out")
+LEFT_PWM_CH = rospy.get_param("/wheel_control_driver/left_pwm_out")
+LEFT_DIR_CH = rospy.get_param("/wheel_control_driver/left_dir_out")
 
 #Differential Drive Parameters
-WHEEL_BASE = rospy.get_param("/motor_control_driver/wheel_base")
-WHEEL_RADIUS = rospy.get_param("/motor_control_driver/wheel_radius")
+WHEEL_BASE = rospy.get_param("/wheel_control_driver/wheel_base")
+WHEEL_RADIUS = rospy.get_param("/wheel_control_driver/wheel_radius")
 
-class MotorControlDriver(object):
+class WheelControlDriver(object):
     def __init__(self):
         # Define PWM channels
         self.right_pwm_ch = navio.pwm.PWM(RIGHT_PWM_CH)
@@ -32,10 +32,10 @@ class MotorControlDriver(object):
         self.sub_right = rospy.Subscriber('/control/wheels/cmd_vel', Twist, self.callback)
         
         # Publishing
-        self.pub_status = rospy.Publisher('/status/wheels', MotorStatus, queue_size=1)
+        self.pub_status = rospy.Publisher('/status/wheels', WheelStatus, queue_size=1)
 
         # Creating messages
-        self.motor_status = MotorStatus()
+        self.wheel_status = WheelStatus()
         self.cmd_data = Twist()
         
         # Setting initial speed and pwm to 0
@@ -93,7 +93,7 @@ class MotorControlDriver(object):
             self.left_pwm_ch.enable()
             self.left_is_reverse = True
         elif not self.left_reverse and self.left_is_reverse:
-            self.disable_pwm_ch.disable()
+            self.left_pwm_ch.disable()
             self.left_is_reverse = False
         
         # Reverse right wheel
@@ -108,12 +108,12 @@ class MotorControlDriver(object):
         self.left_pwm_ch.set_duty_cycle(self.left_pwm)
 
     def publish_status(self):
-        self.motor_status.left_pwm = self.left_pwm
-        self.motor_status.right_pwm = self.right_pwm
-        self.motor_status.left_reverse = self.left_reverse
-        self.motor_status.right_reverse = self.right_reverse
+        self.wheel_status.left_pwm = self.left_pwm
+        self.wheel_status.right_pwm = self.right_pwm
+        self.wheel_status.left_reverse = self.left_reverse
+        self.wheel_status.right_reverse = self.right_reverse
         
-        self.pub_status.publish(self.motor_status)
+        self.pub_status.publish(self.wheel_status)
 
     def initialize_pwm(self):
         # Initialize left channels
@@ -137,7 +137,7 @@ class MotorControlDriver(object):
         rospy.loginfo("Wheel motors initialized.")
 
 if __name__ == "__main__":
-    rospy.init_node('motor_control_driver', log_level=rospy.INFO)
-    motor_control_object = MotorControlDriver()
+    rospy.init_node('wheel_control_driver', log_level=rospy.INFO)
+    wheel_control_object = WheelControlDriver()
     rate = rospy.Rate(1)
     rospy.spin()
