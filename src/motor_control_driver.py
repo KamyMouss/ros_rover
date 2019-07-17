@@ -2,6 +2,7 @@
 
 import rospy
 import navio
+import os
 from geometry_msgs.msg import Twist
 from yqb_car.msg import MotorStatus
 
@@ -46,7 +47,8 @@ class MotorControlDriver(object):
         # Setting initial direction
         self.left_reverse = False
         self.right_reverse = False
-        
+        self.left_is_reverse = False         
+        self.right_is_reverse = False
     # Capture cmd_vel 
     def callback(self, data):
         self.cmd_data = data
@@ -89,8 +91,27 @@ class MotorControlDriver(object):
     def turn_wheels(self):
         #rospy.loginfo("DIR (Left, Right): " + str(self.right_reverse) + ", " + str(self.left_reverse))
         #rospy.loginfo("PWM (Left, Right): " + str(self.left_pwm) + ", " + str(self.right_pwm))
+	if self.left_reverse and  not self.left_is_reverse:
+            script = """
+            echo "Reverse left with ECHO gpio command"
+            """
+            os.system("bash -c '%s'" % script)
+
+	    self.left_is_reverse = True
+	elif not self.left_reverse:
+	    self.left_is_reverse = False
         
-        self.right_pwm_ch.set_duty_cycle(self.right_pwm)
+	if self.right_reverse and not self.right_is_reverse:
+            script = """
+  	    echo "Reverse right with  ECHO gpio command"
+	    """
+            os.system("bash -c '%s'" % script)
+	    
+	    self.right_is_reverse = True
+	elif not self.right_reverse:
+	    self.right_is_reverse = False
+
+	self.right_pwm_ch.set_duty_cycle(self.right_pwm)
         self.left_pwm_ch.set_duty_cycle(self.left_pwm)
 
     def publish_status(self):
