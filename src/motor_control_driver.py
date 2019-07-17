@@ -49,7 +49,7 @@ class MotorControlDriver(object):
         self.right_reverse = False
         self.left_is_reverse = False         
         self.right_is_reverse = False
-    # Capture cmd_vel 
+
     def callback(self, data):
         self.cmd_data = data
         self.cmd_vel_to_pwm(self.cmd_data)
@@ -57,7 +57,6 @@ class MotorControlDriver(object):
         self.publish_status()
         #rospy.loginfo(self.cmd_data)
     
-    #transform to differential drive velocities (right and left wheel velocities)
     def cmd_vel_to_pwm(self, cmd_data):
         linear_v = cmd_data.linear.x
         angular_w = cmd_data.angular.z
@@ -71,7 +70,7 @@ class MotorControlDriver(object):
         self.left_pwm = abs(self.v_left / VEL_TO_PWM_FACTOR)
         self.right_pwm = abs(self.v_right / VEL_TO_PWM_FACTOR)
         
-        # Determine if wheel direction is reversed
+        # Determine if wheel direction needs to be reversed
         if self.v_left >= 0: 
             self.left_reverse = False
         else: 
@@ -89,29 +88,23 @@ class MotorControlDriver(object):
             self.right_pwm = temp
 
     def turn_wheels(self):
-        #rospy.loginfo("DIR (Left, Right): " + str(self.right_reverse) + ", " + str(self.left_reverse))
-        #rospy.loginfo("PWM (Left, Right): " + str(self.left_pwm) + ", " + str(self.right_pwm))
-	if self.left_reverse and  not self.left_is_reverse:
-            script = """
-            echo "Reverse left with ECHO gpio command"
-            """
-            os.system("bash -c '%s'" % script)
-
-	    self.left_is_reverse = True
-	elif not self.left_reverse:
-	    self.left_is_reverse = False
+        # Reverse left wheel
+        if self.left_reverse and not self.left_is_reverse:
+            self.left_pwm_ch.enable()
+            self.left_is_reverse = True
+        elif not self.left_reverse and self.left_is_reverse:
+            self.disable_pwm_ch.disable()
+            self.left_is_reverse = False
         
-	if self.right_reverse and not self.right_is_reverse:
-            script = """
-  	    echo "Reverse right with  ECHO gpio command"
-	    """
-            os.system("bash -c '%s'" % script)
-	    
-	    self.right_is_reverse = True
-	elif not self.right_reverse:
-	    self.right_is_reverse = False
+        # Reverse right wheel
+        if self.right_reverse and not self.right_is_reverse:
+            self.right_pwm_ch.enable()
+            self.right_is_reverse = True
+        elif not self.right_reverse and self.right_is_reverse:
+            self.right_pwm_ch.disable()
+            self.right_is_reverse = False
 
-	self.right_pwm_ch.set_duty_cycle(self.right_pwm)
+        self.right_pwm_ch.set_duty_cycle(self.right_pwm)
         self.left_pwm_ch.set_duty_cycle(self.left_pwm)
 
     def publish_status(self):
@@ -123,24 +116,25 @@ class MotorControlDriver(object):
         self.pub_status.publish(self.motor_status)
 
     def initialize_pwm(self):
+        # Initialize left channels
+        self.left_pwm_ch.initialize()
+        self.left_pwm_ch.set_period(50)
+        self.left_pwm_ch.enable()
+        
+        # Left channel dir disabled by default
+        self.left_dir_ch.initialize()
+        self.left_dir_ch.set_period(50)
+        
+        # Initialize right channels
         self.right_pwm_ch.initialize()
         self.right_pwm_ch.set_period(50)
         self.right_pwm_ch.enable()
 
+        # Right channel dir disabled by default
         self.right_dir_ch.initialize()
         self.right_dir_ch.set_period(50)
-        self.right_dir_ch.enable()
-
-        self.left_pwm_ch.initialize()
-        self.left_pwm_ch.set_period(50)
-        self.left_pwm_ch.enable()
-
-        self.left_dir_ch.initialize()
-        self.left_dir_ch.set_period(50)
-        self.left_dir_ch.enable()
 
         rospy.loginfo("Wheel motors initialized.")
-
 
 if __name__ == "__main__":
     rospy.init_node('motor_control_driver', log_level=rospy.INFO)
