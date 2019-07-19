@@ -85,7 +85,7 @@ class AutopilotControl(object):
         self.sensor_gps = data
 	
     def run_autopilot(self):
-        if self.control_autopilot.command == "ACTIVATED" and self.status_autopilot.status == "ACTIVE_MISSION":
+        if self.control_autopilot.command == "ACTIVATED":
             rospy.loginfo("Autopilot running active mission.")
 
 if __name__ == "__main__":

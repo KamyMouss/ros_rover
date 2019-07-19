@@ -1,3 +1,4 @@
+string selected_camera
 float32 left_pan_dir
 float32 left_tilt_dir
 float32 right_pan_dir

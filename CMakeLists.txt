@@ -13,7 +13,7 @@ add_message_files(
   WheelStatus.msg
   CameraControl.msg
   CameraStatus.msg
-  AccelGyroMagMsg.msg
+  AccelGyroMag.msg
   Barometer.msg
   GPS.msg
   ADC.msg
