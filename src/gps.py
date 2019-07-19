@@ -30,7 +30,7 @@ class GPSReader(object):
         if msg.name() == "NAV_POSLLH":
             outstr = str(msg).split(",")[1:]
             #print outstr
-	        outstr = "".join(outstr)
+	    outstr = "".join(outstr)
             self.gps_data.msg =  outstr
 
 
