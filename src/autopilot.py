@@ -4,6 +4,7 @@ import yaml
 import json
 import rospy
 from sensor_msgs.msg import Joy
+from geometry_msgs.msg import Twist
 from yqb_car.msg import AutopilotControl
 from yqb_car.msg import AutopilotStatus
 from yqb_car.msg import WheelStatus
@@ -15,10 +16,10 @@ from yqb_car.msg import AccelGyroMag
 from yqb_car.msg import CameraControl
 from std_msgs.msg import Empty
 
-class AutopilotControl(object):
+class Autopilot(object):
     def __init__(self):
         # Subscribe to all ros topics
-        self.sub_wheels = rospy.Subscriber('/control/autopilot', AutopilotControl, self.autopilot_callback)
+        self.sub_autopilot = rospy.Subscriber('/control/autopilot', AutopilotControl, self.autopilot_callback)
         self.control_autopilot = AutopilotControl()
 
         self.sub_wheels = rospy.Subscriber('/status/wheels', WheelStatus, self.wheels_callback)
@@ -85,12 +86,12 @@ class AutopilotControl(object):
         self.sensor_gps = data
 	
     def run_autopilot(self):
-        if self.control_autopilot.command == "ACTIVATED" and self.status_autopilot.status == "ACTIVE_MISSION":
+        if self.control_autopilot.command == "ACTIVATED":
             rospy.loginfo("Autopilot running active mission.")
 
 if __name__ == "__main__":
     rospy.init_node('autopilot', log_level=rospy.INFO)
-    autopilot_object = AutopilotControl()
+    autopilot_object = Autopilot()
     rate = rospy.Rate(1)
 
     while not rospy.is_shutdown():

@@ -39,7 +39,7 @@ class JoyTeleop(object):
         
         
         self.camera_control.selected_camera = "LEFT"
-        self.autopilot_control.command = "ACTIVATED"
+        self.autopilot_control.command = "DISACTIVATED"
 
         rospy.loginfo("Left Camera Control Selected.")
 
@@ -49,11 +49,11 @@ class JoyTeleop(object):
         joy_buttons = data.buttons
         
          # Autopilot Control
-        if joy_buttons[ACTIVATE_AUTOPILOT] == 1 and self.autopilot_control.command != "ACTIVATED":
+        if joy_axes[ACTIVATE_AUTOPILOT] == 1 and self.autopilot_control.command != "ACTIVATED":
             self.autopilot_control.command = "ACTIVATED"
             self.pub_autopilot_control.publish(self.autopilot_control)
             rospy.loginfo("Autopilot Activated.")
-        elif joy_buttons[DISACTIVATE_AUTOPILOT] == -1 and self.autopilot_control.command != "DISACTIVATED":
+        elif joy_axes[DISACTIVATE_AUTOPILOT] == -1 and self.autopilot_control.command != "DISACTIVATED":
             self.autopilot_control.command = "DISACTIVATED"
             self.pub_autopilot_control.publish(self.autopilot_control)
             rospy.loginfo("Autopilot Disactivated.")

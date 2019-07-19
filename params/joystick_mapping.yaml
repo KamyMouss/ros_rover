@@ -9,5 +9,5 @@ left_camera_select: 3   # Square button
 right_camera_select: 1  # Circle button
 
 # Autopilot
-activate_autopilot: 8     # Up arrow when value = 1
-disactivate_autopilot: 8  # Down arrow when value = -1
+activate_autopilot: 7     # Up arrow when value = 1
+disactivate_autopilot: 7  # Down arrow when value = -1
