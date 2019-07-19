@@ -7,10 +7,10 @@ from std_msgs.msg import Float32MultiArray
 from yqb_car.msg import ADC
 
 # ADC Thresholds (V)
-A0_MIN = rospy.get_param("/adc_reader/A0_min")
-A0_MAX = rospy.get_param("/adc_reader/A0_max")
-A1_MIN = rospy.get_param("/adc_reader/A1_min")
-A1_MAX = rospy.get_param("/adc_reader/A1_max")
+A0_MIN = rospy.get_param("/adc/A0_min")
+A0_MAX = rospy.get_param("/adc/A0_max")
+A1_MIN = rospy.get_param("/adc/A1_min")
+A1_MAX = rospy.get_param("/adc/A1_max")
 
 
 class AdcReader(object):
@@ -49,7 +49,7 @@ class AdcReader(object):
         self.pub.publish(self.adc_voltages)
 
 if __name__ == "__main__":
-    rospy.init_node('adc_reader')
+    rospy.init_node('adc')
     adc_reader = AdcReader()
 
     rate = rospy.Rate(1)

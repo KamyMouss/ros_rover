@@ -14,54 +14,57 @@ from std_msgs.msg import Empty
 
 class RosWebsocket(object):
     def __init__(self):
-        # Subscribe to ros topics
-        self.sub_motor = rospy.Subscriber('/status/wheels', MotorStatus, self.callback)
+        # Subscribe to all ros topics
+        self.sub_motor = rospy.Subscriber('/status/wheels', MotorStatus, self.topic_callback_send_data)
         self.status_motor = MotorStatus()
 
-        self.sub_camera = rospy.Subscriber('/status/camera', CameraStatus, self.callback)
+        self.sub_camera = rospy.Subscriber('/status/camera', CameraStatus, self.topic_callback_send_data)
         self.status_camera = CameraStatus()
 
         # NOT IMPLEMENTED
-        # self.sub_led = rospy.Subscriber('/status/led', Empty, self.callback)
+        # self.sub_led = rospy.Subscriber('/status/led', Empty, self.topic_callback_send_data)
         # self.status_led = Empty()
 
-        self.sub_batteries = rospy.Subscriber('/health/batteries', ADC, self.callback)
+        self.sub_batteries = rospy.Subscriber('/health/batteries', ADC, self.topic_callback_send_data)
         self.health_batteries = ADC()
 
         # NOT IMPLEMENTED
-        # self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.callback)
+        # self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.topic_callback_send_data)
         # self.health_pi = Empty() 
 
-        self.sub_acm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMagMsg, self.callback)
+        self.sub_acm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMagMsg, self.topic_callback_send_data)
         self.sensor_acm = AccelGyroMagMsg()
 
-        self.sub_baro = rospy.Subscriber('/sensor/barometer', Barometer, self.callback)
+        self.sub_baro = rospy.Subscriber('/sensor/barometer', Barometer, self.topic_callback_send_data)
         self.sensor_baro = Barometer()
 
-        self.sub_gps = rospy.Subscriber('/sensor/gps', GPS, self.callback)
+        self.sub_gps = rospy.Subscriber('/sensor/gps', GPS, self.topic_callback_send_data)
         self.sensor_gps = GPS()
-
 
         # Publish joystick control
         self.pub_joy = rospy.Publisher('/joy', Joy, queue_size=1)
         self.joy_data = Joy()
 
-    def callback(self, data):
+    def topic_callback_send_data(self, data):
         # send data over websocket
 	    print self.msg2json(data)
+
+    def websocket_receive_data(self):
+        # receive control data (preferably joystick controls) over websocket
+        joy_data_json = True
+        self.send_joy_controls(joy_data_json)
 
     def msg2json(self, msg):
         # Convert a ROS message to JSON format
         y = yaml.load(str(msg))
         return json.dumps(y,indent=4)
 
-    def send_joy_controls(self):
-        self.pub_joy.publish(self.joy_data)
+    def send_joy_controls(self, joy_data_json):
+        # Publish joy data
+        self.pub_joy.publish(self.json2joy(joy_data_json))
 
-    def json2joy(self)    
-        self.joy_data
-
-    def receive_data(self):
+    def json2joy(self)   
+        #convert json joy data to ros message 
         pass
 
 if __name__ == "__main__":
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     rate = rospy.Rate(100)
 
     while not rospy.is_shutdown():
-        ros_websocket_object.send_joy_controls()
+        ros_websocket_object.websocket_receive_data()
         rate.sleep()
 
     rospy.spin()

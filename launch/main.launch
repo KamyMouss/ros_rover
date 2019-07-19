@@ -2,7 +2,7 @@
 	<!-- Joystick nodes -->
 	<node pkg="joy" type="joy_node" name="joy_node" />
 	<node pkg="yqb_car" type="joy_teleop.py" name="joy_teleop" output="screen" >
-		<rosparam file="$(find yqb_car)/params/joystick.yaml" command="load"/>
+		<rosparam file="$(find yqb_car)/params/joystick_mapping.yaml" command="load"/>
 	</node>
 
 	<!-- Motors nodes -->
@@ -16,8 +16,8 @@
 	</node>
 	
 	<!-- Sensor Nodes-->
-	<node pkg="yqb_car" type="adc_reader.py" name="adc_reader"  >
-		<rosparam file="$(find yqb_car)/params/adc.yaml" command="load"/>
+	<node pkg="yqb_car" type="adc.py" name="adc"  >
+		<rosparam file="$(find yqb_car)/params/adc_threshold.yaml" command="load"/>
 	</node>
 	<node pkg="yqb_car" type="accel_gyro_mag.py" name="accel_gyro_mag" output="screen" >
 		<rosparam file="$(find yqb_car)/params/imu_sensor.yaml" command="load"/>

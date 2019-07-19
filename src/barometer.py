@@ -3,6 +3,7 @@
 import navio.adc
 import navio.ms5611
 import navio.util
+import time
 
 import rospy
 from yqb_car.msg import Barometer
@@ -10,17 +11,23 @@ from yqb_car.msg import Barometer
 
 class BarometerReader(object):
     def __init__(self):
+        # Publishing
         self.pub = rospy.Publisher('/sensor/barometer', Barometer, queue_size=1)
+        
         self.baro = navio.ms5611.MS5611()
         self.baro.initialize()   
         rospy.loginfo("Barometer initialized.")
         self.baro_data = Barometer()
 
     def get_data(self):
+        # Get Pressure
         self.baro.refreshPressure()
+        time.sleep(0.01) # Waiting for pressure data ready 10ms
         self.baro.readPressure()
 
+        # Get Temperature
         self.baro.refreshTemperature()
+        time.sleep(0.01) # Waiting for temperature data ready 10ms
         self.baro.readTemperature()
 
         self.baro.calculatePressureAndTemperature()

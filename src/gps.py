@@ -11,29 +11,34 @@ from yqb_car.msg import GPS
 
 class GPSReader(object):
     def __init__(self):
+        # Publishing 
         self.pub = rospy.Publisher('/sensor/gps', GPS, queue_size=1)
+        
+        # Initializing ubl
         self.ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=2)
         self.initialize()
 
     def get_data(self):
+        # Reading sensor messages
         msg = self.ubl.receive_message()
         if msg is None:
             if opts.reopen:
                 self.ubl.close()
                 self.ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=2)
 
-        #print(msg.name())
+        # Gather gps data
         if msg.name() == "NAV_POSLLH":
             outstr = str(msg).split(",")[1:]
             print outstr
 	    outstr = "".join(outstr)
             print outstr
+
+        # Gather gps status
         if msg.name() == "NAV_STATUS":
             outstr = str(msg).split(",")[1:2]
             print outstr
             outstr = "".join(outstr)
             print outstr
-        #print(str(msg))
 
     def initialize(self):
         self.ubl.configure_poll_port()

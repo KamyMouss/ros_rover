@@ -62,8 +62,8 @@ class WheelControlDriver(object):
         angular_w = cmd_data.angular.z
         
         # Calculate differential speed
-        self.v_right = (((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS))
-        self.v_left = (((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS))
+        self.v_right = (((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
+        self.v_left = (((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
         #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
         
         # Transform to pwm values (in ms)
@@ -104,6 +104,7 @@ class WheelControlDriver(object):
             self.right_pwm_ch.disable()
             self.right_is_reverse = False
 
+        # Set servo pwm
         self.right_pwm_ch.set_duty_cycle(self.right_pwm)
         self.left_pwm_ch.set_duty_cycle(self.left_pwm)
 

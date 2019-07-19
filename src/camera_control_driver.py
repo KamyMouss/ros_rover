@@ -80,11 +80,13 @@ class CameraControlDriver(object):
         rospy.loginfo("Camera Control initialized.")
 
     def set_pwm(self):
+        # Set the servos to the appropriate pwm
         self.left_pan.set_duty_cycle(self.cam_status.left_pan_pwm)
         self.left_tilt.set_duty_cycle(self.cam_status.left_tilt_pwm)
         self.right_pan.set_duty_cycle(self.cam_status.right_pan_pwm)
         self.right_tilt.set_duty_cycle(self.cam_status.right_tilt_pwm)
 
+        # Publish status topic
         self.pub_cam_status.publish(self.cam_status)
 
     def update_pwm(self):
