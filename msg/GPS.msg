@@ -1,4 +1,6 @@
-float32 Longitude
+string msg
+string status
+float32 longitude
 float32 latitude
 float32 height
 float32 hMSL

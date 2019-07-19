@@ -13,7 +13,7 @@ class GPSReader(object):
     def __init__(self):
         # Publishing 
         self.pub = rospy.Publisher('/sensor/gps', GPS, queue_size=1)
-        
+        self.gps_data = GPS()
         # Initializing ubl
         self.ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=2)
         self.initialize()
@@ -29,16 +29,21 @@ class GPSReader(object):
         # Gather gps data
         if msg.name() == "NAV_POSLLH":
             outstr = str(msg).split(",")[1:]
-            print outstr
-	    outstr = "".join(outstr)
-            print outstr
+            #print outstr
+	        outstr = "".join(outstr)
+            self.gps_data.msg =  outstr
+
 
         # Gather gps status
         if msg.name() == "NAV_STATUS":
             outstr = str(msg).split(",")[1:2]
-            print outstr
+            #print outstr
             outstr = "".join(outstr)
             print outstr
+            self.gps_data.status = outstr
+
+        self.pub.publish(self.gps_data)
+
 
     def initialize(self):
         self.ubl.configure_poll_port()
