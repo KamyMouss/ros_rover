@@ -5,7 +5,7 @@ left_pwm_out: 3
 left_dir_out: 4
 
 # Max pwm for motors
-max_pwm: 20.000
+max_pwm: 10.000
 
 # Differential drive parameters (meters/radian)
 wheel_base: 0.10
