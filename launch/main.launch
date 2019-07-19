@@ -5,6 +5,9 @@
 		<rosparam file="$(find yqb_car)/params/joystick_mapping.yaml" command="load"/>
 	</node>
 
+	<!-- Autopilot Node -->
+	<node pkg="yqb_car" type="autopilot.py" name="autopilot" output="screen" >
+
 	<!-- Motors nodes -->
 	<node pkg="yqb_car" type="wheel_control_driver.py" name="wheel_control_driver" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" output="screen">
 		<rosparam file="$(find yqb_car)/params/wheel_driver.yaml" command="load"/>
