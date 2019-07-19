@@ -91,12 +91,9 @@ class Autopilot(object):
     def run_autopilot(self):
         # Activate and disactivated autopilot from command/autopilot topic
         if self.control_autopilot.is_activated and self.status_autopilot.status == "DISACTIVATED":
-            self.status_autopilot.status = "IN PROGRESS"
-            
-            # Run autopilot command
             self.status_autopilot.current_command = self.control_autopilot.command
-            if self.status_autopilot.current_command == "RUN CIRCLE":
-                self.autopilot_run_circle()    
+            
+            self.run_autopilot_command():  
             
             self.pub_autopilot.publish(self.status_autopilot)
             rospy.loginfo("Autopilot Activated. Current job: " + self.status_autopilot.status)
@@ -106,8 +103,18 @@ class Autopilot(object):
             self.pub_autopilot.publish(self.status_autopilot)
             rospy.loginfo("Autopilot Disactivated.")
 
+    def run_autopilot_command(self):
+        # Run autopilot commands
+        if self.status_autopilot.current_command == '':
+            self.status_autopilot.status = "PENDING"
+        
+        if self.status_autopilot.current_command == "RUN CIRCLE":
+            self.status_autopilot.status = "MISSION IN PROGRESS"
+            self.autopilot_run_circle()  
+
     def autopilot_run_circle(self):
         pass
+
 
 if __name__ == "__main__":
     rospy.init_node('autopilot', log_level=rospy.INFO)
