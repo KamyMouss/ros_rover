@@ -4,21 +4,21 @@ import yaml
 import json
 import rospy
 from sensor_msgs.msg import Joy
-from yqb_car.msg import MotorStatus
+from yqb_car.msg import WheelStatus
 from yqb_car.msg import CameraStatus
 from yqb_car.msg import ADC
 from yqb_car.msg import GPS
 from yqb_car.msg import Barometer
-from yqb_car.msg import AccelGyroMagMsg
+from yqb_car.msg import AccelGyroMag
 from std_msgs.msg import Empty
 
 class RosWebsocket(object):
     def __init__(self):
         # Subscribe to all ros topics
-        self.sub_motor = rospy.Subscriber('/status/wheels', MotorStatus, self.topic_callback_send_data)
-        self.status_motor = MotorStatus()
+        self.sub_wheel = rospy.Subscriber('/status/wheels', WheelStatus, self.topic_callback_send_data)
+        self.status_wheel = WheelStatus()
 
-        self.sub_camera = rospy.Subscriber('/status/camera', CameraStatus, self.topic_callback_send_data)
+        self.sub_camera = rospy.Subscriber('/status/cameras', CameraStatus, self.topic_callback_send_data)
         self.status_camera = CameraStatus()
 
         # NOT IMPLEMENTED
@@ -32,8 +32,8 @@ class RosWebsocket(object):
         # self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.topic_callback_send_data)
         # self.health_pi = Empty() 
 
-        self.sub_acm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMagMsg, self.topic_callback_send_data)
-        self.sensor_acm = AccelGyroMagMsg()
+        self.sub_agm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMag, self.topic_callback_send_data)
+        self.sensor_agm = AccelGyroMag()
 
         self.sub_baro = rospy.Subscriber('/sensor/barometer', Barometer, self.topic_callback_send_data)
         self.sensor_baro = Barometer()

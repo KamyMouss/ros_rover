@@ -17,6 +17,8 @@ add_message_files(
   Barometer.msg
   GPS.msg
   ADC.msg
+  AutopilotControl.msg
+  AutopilotStatus.msg
 )
 
 generate_messages(

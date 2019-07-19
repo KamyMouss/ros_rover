@@ -41,11 +41,11 @@ class CameraControlDriver(object):
         self.initialize_pwm()
 
         # Subscribe to camera direction
-        self.sub_cam_ctrl = rospy.Subscriber('/control/camera', CameraControl, self.callback)
+        self.sub_cam_ctrl = rospy.Subscriber('/control/cameras', CameraControl, self.callback)
         self.cam_ctrl_dir = CameraControl()
         
         # Publish camera status
-        self.pub_cam_status = rospy.Publisher('/status/camera', CameraStatus , queue_size=1)
+        self.pub_cam_status = rospy.Publisher('/status/cameras', CameraStatus , queue_size=1)
         self.cam_status = CameraStatus()
         self.cam_status.left_pan_pwm = LEFT_PAN_CENTER
         self.cam_status.left_tilt_pwm = LEFT_TILT_CENTER

@@ -1,3 +1,4 @@
+string selected_camera
 float32 left_pan_pwm
 float32 left_tilt_pwm
 float32 right_pan_pwm
