@@ -53,7 +53,7 @@ class JoyTeleop(object):
             self.autopilot_control.is_activated = True
             self.pub_autopilot_control.publish(self.autopilot_control)
             rospy.loginfo("Autopilot is_Activated.")
-        elif joy_axes[DISACTIVATE_AUTOPILOT] == -1 and self.autopilot_control.is_activated":
+        elif joy_axes[DISACTIVATE_AUTOPILOT] == -1 and self.autopilot_control.is_activated:
             self.autopilot_control.is_activated = False
             self.pub_autopilot_control.publish(self.autopilot_control)
             rospy.loginfo("Autopilot Disis_activated.")
