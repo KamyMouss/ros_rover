@@ -135,7 +135,7 @@ class WheelControlDriver(object):
         self.right_dir_ch.initialize()
         self.right_dir_ch.set_period(50)
 
-        rospy.loginfo("Wheel motors initialized.")
+        rospy.loginfo("Wheel Motors Initialized.")
 
 if __name__ == "__main__":
     rospy.init_node('wheel_control_driver', log_level=rospy.INFO)

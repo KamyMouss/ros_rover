@@ -77,7 +77,7 @@ class CameraControlDriver(object):
         self.right_tilt.set_period(50)
         self.right_tilt.enable()
 
-        rospy.loginfo("Camera Control initialized.")
+        rospy.loginfo("Camera Control Initialized.")
 
     def set_pwm(self):
         # Set the servos to the appropriate pwm
