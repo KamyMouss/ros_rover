@@ -48,7 +48,7 @@ class AutopilotControl(object):
         self.sensor_gps = GPS()
 
         # Publishing 
-        self.pub_joy = rospy.Publisher('/status/autopilot', AutopilotStatus, queue_size=1)
+        self.pub_autopilot = rospy.Publisher('/status/autopilot', AutopilotStatus, queue_size=1)
         self.status_autopilot = AutopilotStatus()
 
         self.pub_cmd_vel = rospy.Publisher('/control/wheels/cmd_vel', Twist, queue_size=1)
@@ -86,7 +86,12 @@ class AutopilotControl(object):
 	
     def run_autopilot(self):
         if self.control_autopilot.command == "ACTIVATED":
-            rospy.loginfo("Autopilot running active mission.")
+            self.status_autopilot.status = "Active mission"
+            rospy.loginfo("Autopilot running" + self.status_autopilot.status)
+            self.pub_autopilot.publish(self.status_autopilot)
+        else if self.status_autopilot.status == "Active mission":
+            self.status_autopilot.status = "No Active mission"
+            self.pub_autopilot.publish(self.status_autopilot)
 
 if __name__ == "__main__":
     rospy.init_node('autopilot', log_level=rospy.INFO)
