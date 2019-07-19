@@ -93,7 +93,7 @@ class Autopilot(object):
         if self.control_autopilot.is_activated and self.status_autopilot.status == "DISACTIVATED":
             self.status_autopilot.current_command = self.control_autopilot.command
             
-            self.run_autopilot_command():  
+            self.run_autopilot_command()  
             
             self.pub_autopilot.publish(self.status_autopilot)
             rospy.loginfo("Autopilot Activated. Current job: " + self.status_autopilot.current_command)
