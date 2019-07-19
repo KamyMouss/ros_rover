@@ -53,7 +53,7 @@ class Autopilot(object):
         self.status_autopilot = AutopilotStatus()
         self.status_autopilot.status = "DISACTIVATED"
         self.pub_autopilot.publish(self.status_autopilot)
-        rospy.loginfo("Autopilot inititiated. Current Job: " + self.status_autopilot.status)
+        rospy.loginfo("Autopilot inititiated. Current Status: " + self.status_autopilot.status)
 
         self.pub_cmd_vel = rospy.Publisher('/control/wheels/cmd_vel', Twist, queue_size=1)
         self.cmd_vel = Twist()
@@ -96,7 +96,7 @@ class Autopilot(object):
             self.run_autopilot_command():  
             
             self.pub_autopilot.publish(self.status_autopilot)
-            rospy.loginfo("Autopilot Activated. Current job: " + self.status_autopilot.status)
+            rospy.loginfo("Autopilot Activated. Current job: " + self.status_autopilot.current_command)
 
         elif not self.control_autopilot.is_activated and self.status_autopilot.status != "DISACTIVATED":
             self.status_autopilot.status = "DISACTIVATED"
