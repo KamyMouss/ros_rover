@@ -47,21 +47,20 @@ class RosWebsocket(object):
 
     def topic_callback_send_data(self, data):
         # send data over websocket
-	    print self.msg2json(data)
+	    # print self.msg2json(data)
+        pass
 
     def websocket_receive_data(self):
         # receive control data (preferably joystick controls) over websocket
         joy_data_json = True
-        self.send_joy_controls(joy_data_json)
+        
+        # Publish joy data
+        self.pub_joy.publish(self.json2joy(joy_data_json))
 
     def msg2json(self, msg):
         # Convert a ROS message to JSON format
         y = yaml.load(str(msg))
         return json.dumps(y,indent=4)
-
-    def send_joy_controls(self, joy_data_json):
-        # Publish joy data
-        self.pub_joy.publish(self.json2joy(joy_data_json))
 
     def json2joy(self)   
         #convert json joy data to ros message 
