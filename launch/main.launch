@@ -26,6 +26,6 @@
 	<node pkg="yqb_car" type="gps.py" name="gps" />
 
 	<!-- Autopilot Node -->
-	<node pkg="yqb_car" type="autopilot.py" name="autopilot" output="screen" >
+	<node pkg="yqb_car" type="autopilot.py" name="autopilot" output="screen" />
 
 </launch>
