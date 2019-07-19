@@ -1,1 +1,2 @@
+bool is_activated
 string command

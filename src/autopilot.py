@@ -53,7 +53,7 @@ class Autopilot(object):
         self.status_autopilot = AutopilotStatus()
         self.status_autopilot.status = "DISACTIVATED"
         self.pub_autopilot.publish(self.status_autopilot)
-        rospy.loginfo("Autopilot inititiated. Currently: " + str(self.status_autopilot.status))
+        rospy.loginfo("Autopilot inititiated. Current Job: " + self.status_autopilot.status)
 
         self.pub_cmd_vel = rospy.Publisher('/control/wheels/cmd_vel', Twist, queue_size=1)
         self.cmd_vel = Twist()
@@ -89,14 +89,25 @@ class Autopilot(object):
         self.sensor_gps = data
 	
     def run_autopilot(self):
-        if self.control_autopilot.command == "ACTIVATED" and self.status_autopilot.status == "DISACTIVATED":
-            self.status_autopilot.status = "ACTIVE MISSION"
+        # Activate and disactivated autopilot from command/autopilot topic
+        if self.control_autopilot.is_activated and self.status_autopilot.status == "DISACTIVATED":
+            self.status_autopilot.status = "IN PROGRESS"
+            
+            # Run autopilot command
+            self.status_autopilot.current_command = self.control_autopilot.command
+            if self.status_autopilot.current_command == "RUN CIRCLE":
+                self.autopilot_run_circle()    
+            
             self.pub_autopilot.publish(self.status_autopilot)
             rospy.loginfo("Autopilot Activated. Current job: " + self.status_autopilot.status)
-        elif self.control_autopilot.command == "DISACTIVATED" and self.status_autopilot.status != "DISACTIVATED":
+
+        elif not self.control_autopilot.is_activated and self.status_autopilot.status != "DISACTIVATED":
             self.status_autopilot.status = "DISACTIVATED"
             self.pub_autopilot.publish(self.status_autopilot)
             rospy.loginfo("Autopilot Disactivated.")
+
+    def autopilot_run_circle(self):
+        pass
 
 if __name__ == "__main__":
     rospy.init_node('autopilot', log_level=rospy.INFO)
