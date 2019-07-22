@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 
 import rospy
+from std_msgs.msg import Empty
 
 class PiHealthReader(object):
     def __init__(self):
-        self.pub = rospy.Publisher('/health/pi', ADC, queue_size=1)
+        self.pub = rospy.Publisher('/health/pi', Empty, queue_size=1)
 
     def get_health(self):
         pass 
