@@ -29,15 +29,15 @@ class Autopilot(object):
         self.status_camera = CameraStatus()
 
         # NOT IMPLEMENTED
-        # self.sub_led = rospy.Subscriber('/status/led', Empty, self.led_callback)
-        # self.status_led = Empty()
+        self.sub_led = rospy.Subscriber('/status/led', Empty, self.led_callback)
+        self.status_led = Empty()
 
         self.sub_batteries = rospy.Subscriber('/health/batteries', ADC, self.adc_callback)
         self.health_batteries = ADC()
 
         # NOT IMPLEMENTED
-        # self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.pi_callback)
-        # self.health_pi = Empty() 
+        self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.pi_callback)
+        self.health_pi = Empty() 
 
         self.sub_agm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMag, self.agm_callback)
         self.sensor_agm = AccelGyroMag()

@@ -22,15 +22,15 @@ class RosWebsocket(object):
         self.status_camera = CameraStatus()
 
         # NOT IMPLEMENTED
-        # self.sub_led = rospy.Subscriber('/status/led', Empty, self.topic_callback_send_data)
-        # self.status_led = Empty()
+        self.sub_led = rospy.Subscriber('/status/led', Empty, self.topic_callback_send_data)
+        self.status_led = Empty()
 
         self.sub_batteries = rospy.Subscriber('/health/batteries', ADC, self.topic_callback_send_data)
         self.health_batteries = ADC()
 
         # NOT IMPLEMENTED
-        # self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.topic_callback_send_data)
-        # self.health_pi = Empty() 
+        self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.topic_callback_send_data)
+        self.health_pi = Empty() 
 
         self.sub_agm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMag, self.topic_callback_send_data)
         self.sensor_agm = AccelGyroMag()
