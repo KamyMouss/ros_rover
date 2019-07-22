@@ -29,7 +29,7 @@ class WheelControlDriver(object):
         self.initialize_pwm()
 
         # Subscribing
-        self.sub_right = rospy.Subscriber('/control/wheels/cmd_vel', Twist, self.callback)
+        self.sub_right = rospy.Subscriber('/control/wheels', Twist, self.callback)
         
         # Publishing
         self.pub_status = rospy.Publisher('/status/wheels', WheelStatus, queue_size=1)

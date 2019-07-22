@@ -55,7 +55,7 @@ class Autopilot(object):
         self.pub_autopilot.publish(self.status_autopilot)
         rospy.loginfo("Autopilot Initialized. Current Status: " + self.status_autopilot.status)
 
-        self.pub_cmd_vel = rospy.Publisher('/control/wheels/cmd_vel', Twist, queue_size=1)
+        self.pub_cmd_vel = rospy.Publisher('/control/wheels', Twist, queue_size=1)
         self.cmd_vel = Twist()
 
         self.pub_camera_control = rospy.Publisher('/control/cameras', CameraControl, queue_size=1)
