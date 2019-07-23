@@ -25,7 +25,7 @@
 	<node pkg="yqb_car" type="barometer.py" name="barometer" />
 	<node pkg="yqb_car" type="gps.py" name="gps" />
 	<node pkg="yqb_car" type="led.py" name="led" />
-	<node pkg="yqb_car" type="pi_health.py" name="pi_health" />
+	<node pkg="yqb_car" type="pi_health.py" name="pi_health" output="screen"/>
 
 	<!-- Autopilot Node -->
 	<node pkg="yqb_car" type="autopilot.py" name="autopilot" output="screen" />
