@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
+import psutil
 from std_msgs.msg import Empty
 
 class PiHealthReader(object):
@@ -8,7 +9,10 @@ class PiHealthReader(object):
         self.pub = rospy.Publisher('/health/pi', Empty, queue_size=1)
 
     def get_health(self):
-        pass 
+        print psutil.cpu_percent(interval=1)
+        print psutil.virtual_memory()
+        print psutil.disk_usage('/')
+        print psutil.sensors_temperatures(
 
 if __name__ == "__main__":
     rospy.init_node('pi_health')
