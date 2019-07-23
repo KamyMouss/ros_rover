@@ -19,6 +19,7 @@ add_message_files(
   ADC.msg
   AutopilotControl.msg
   AutopilotStatus.msg
+  PiHealth.msg
 )
 
 generate_messages(

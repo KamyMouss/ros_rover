@@ -14,6 +14,7 @@ from yqb_car.msg import GPS
 from yqb_car.msg import Barometer
 from yqb_car.msg import AccelGyroMag
 from yqb_car.msg import CameraControl
+from yqb_car.msg import PiHealth
 from std_msgs.msg import Empty
 
 class Autopilot(object):
@@ -36,8 +37,8 @@ class Autopilot(object):
         self.health_batteries = ADC()
 
         # NOT IMPLEMENTED
-        self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.pi_callback)
-        self.health_pi = Empty() 
+        self.sub_pi = rospy.Subscriber('/health/pi', PiHealth, self.pi_callback)
+        self.health_pi = PiHealth() 
 
         self.sub_agm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMag, self.agm_callback)
         self.sensor_agm = AccelGyroMag()

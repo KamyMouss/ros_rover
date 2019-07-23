@@ -10,6 +10,7 @@ from yqb_car.msg import ADC
 from yqb_car.msg import GPS
 from yqb_car.msg import Barometer
 from yqb_car.msg import AccelGyroMag
+from yqb_car.msg import PiHealth
 from std_msgs.msg import Empty
 
 class RosWebsocket(object):
@@ -29,8 +30,8 @@ class RosWebsocket(object):
         self.health_batteries = ADC()
 
         # NOT IMPLEMENTED
-        self.sub_pi = rospy.Subscriber('/health/pi', Empty, self.topic_callback_send_data)
-        self.health_pi = Empty() 
+        self.sub_pi = rospy.Subscriber('/health/pi', PiHealth, self.topic_callback_send_data)
+        self.health_pi = PiHealth() 
 
         self.sub_agm = rospy.Subscriber('/sensor/accel_gyro_mag', AccelGyroMag, self.topic_callback_send_data)
         self.sensor_agm = AccelGyroMag()
