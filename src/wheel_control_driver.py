@@ -67,7 +67,7 @@ class WheelControlDriver(object):
         self.left_vel_target = (((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
         #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.left_vel_target) + ", " + str(self.right_vel_target))
     
-    def calculate_pwm():
+    def calculate_pwm(self):
         # Add acceleration to velocity
         self.smooth_velocities()
 
@@ -92,7 +92,7 @@ class WheelControlDriver(object):
             self.left_pwm = self.right_pwm
             self.right_pwm = temp
 
-    def smooth_velocities():
+    def smooth_velocities(self):
         if self.right_vel_target > self.right_vel_current + MAX_ACCELERATION:
             self.right_vel_current += MAX_ACCELERATION
         elif self.right_vel_target < self.right_vel_current - MAX_ACCELERATION:
