@@ -56,7 +56,6 @@ class WheelControlDriver(object):
     def callback(self, data):
         self.cmd_data = data
         self.cmd_vel_to_pwm(self.cmd_data)
-        self.publish_status()
         #rospy.loginfo(self.cmd_data)
     
     def cmd_vel_to_pwm(self, cmd_data):
@@ -166,5 +165,6 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         wheel_control_object.calculate_pwm()
         wheel_control_object.turn_wheels()
+        wheel_control_object.publish_status()
         rate.sleep()
 
