@@ -76,12 +76,12 @@ class WheelControlDriver(object):
         self.right_pwm = abs(self.right_vel_current * MAX_PWM)
         
         # Determine if wheel direction needs to be reversed
-        if self.left_vel_target >= 0: 
+        if self.left_vel_current >= 0: 
             self.left_reverse = False
         else: 
             self.left_reverse = True
  
-        if self.right_vel_target >= 0: 
+        if self.right_vel_current >= 0: 
             self.right_reverse = False
         else: 
             self.right_reverse = True
