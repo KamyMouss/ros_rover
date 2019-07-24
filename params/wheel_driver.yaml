@@ -7,6 +7,9 @@ left_dir_out: 4
 # Max pwm for motors
 max_pwm: 10.000
 
+# Max acceleration factor (factor * max_pwm)
+max_acceleration: 0.01
+
 # Differential drive parameters (meters/radian)
 wheel_base: 1.000
 wheel_radius: 0.020

@@ -7,7 +7,8 @@ from geometry_msgs.msg import Twist
 from yqb_car.msg import WheelStatus
 
 # Change this for higher pwm range, default 20 (0 - 2500)
-MAX_PWM = rospy.get_param("/wheel_control_driver/max_pwm")   
+MAX_PWM = rospy.get_param("/wheel_control_driver/max_pwm")
+MAX_ACCELERATION = rospy.get_param("/wheel_control_driver/max_acceleration")      
 
 #NAVIO pwn out channels
 RIGHT_PWM_CH = rospy.get_param("/wheel_control_driver/right_pwm_out")
@@ -39,8 +40,10 @@ class WheelControlDriver(object):
         self.cmd_data = Twist()
         
         # Setting initial speed and pwm to 0
-        self.v_right = 0
-        self.v_left = 0
+        self.right_vel_target = 0
+        self.left_vel_target = 0
+        self.right_vel_current = 0
+        self.left_vel_current = 0
         self.right_pwm = 0
         self.left_pwm = 0
 
@@ -53,7 +56,6 @@ class WheelControlDriver(object):
     def callback(self, data):
         self.cmd_data = data
         self.cmd_vel_to_pwm(self.cmd_data)
-        self.turn_wheels()
         self.publish_status()
         #rospy.loginfo(self.cmd_data)
     
@@ -62,21 +64,25 @@ class WheelControlDriver(object):
         angular_w = cmd_data.angular.z
         
         # Calculate differential speed
-        self.v_right = (((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
-        self.v_left = (((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
-        #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.v_left) + ", " + str(self.v_right))
-        
+        self.right_vel_target = (((2*linear_v) + angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
+        self.left_vel_target = (((2*linear_v) - angular_w * WHEEL_BASE) / (2*WHEEL_RADIUS)) / 50
+        #rospy.loginfo("DIFF SPEED (Left, Right): " + str(self.left_vel_target) + ", " + str(self.right_vel_target))
+    
+    def calculate_pwm():
+        # Add acceleration to velocity
+        self.smooth_velocities()
+
         # Transform to pwm values (in ms)
-        self.left_pwm = abs(self.v_left * MAX_PWM)
-        self.right_pwm = abs(self.v_right * MAX_PWM)
+        self.left_pwm = abs(self.left_vel_current * MAX_PWM)
+        self.right_pwm = abs(self.right_vel_current * MAX_PWM)
         
         # Determine if wheel direction needs to be reversed
-        if self.v_left >= 0: 
+        if self.left_vel_target >= 0: 
             self.left_reverse = False
         else: 
             self.left_reverse = True
  
-        if self.v_right >= 0: 
+        if self.right_vel_target >= 0: 
             self.right_reverse = False
         else: 
             self.right_reverse = True
@@ -86,6 +92,21 @@ class WheelControlDriver(object):
             temp = self.left_pwm
             self.left_pwm = self.right_pwm
             self.right_pwm = temp
+
+    def smooth_velocities():
+        if self.right_vel_target > self.right_vel_current + MAX_ACCELERATION:
+            self.right_vel_current += MAX_ACCELERATION
+        elif self.right_vel_target < self.right_vel_current - MAX_ACCELERATION:
+            self.right_vel_current -= MAX_ACCELERATION
+        else: 
+            self.right_vel_current = self.right_vel_target
+
+        if self.left_vel_target > self.left_vel_current + MAX_ACCELERATION:
+            self.left_vel_current += MAX_ACCELERATION
+        elif self.left_vel_target < self.left_vel_current - MAX_ACCELERATION:
+            self.left_vel_current -= MAX_ACCELERATION
+        else: 
+            self.left_vel_current = self.left_vel_target
 
     def turn_wheels(self):
         # Reverse left wheel
@@ -141,4 +162,9 @@ if __name__ == "__main__":
     rospy.init_node('wheel_control_driver', log_level=rospy.INFO)
     wheel_control_object = WheelControlDriver()
     rate = rospy.Rate(1)
-    rospy.spin()
+    
+    while not rospy.is_shutdown():
+        wheel_control_object.calculate_pwm()
+        wheel_control_object.turn_wheels()
+        rate.sleep()
+
